@@ -10,7 +10,7 @@ class Bom extends Model
     use HasFactory;
 
     protected $fillable = [
-        'Bom_code',
+        'bom_code',
         'item_code',
         'quantity'
     ];
