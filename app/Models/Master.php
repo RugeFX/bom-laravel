@@ -18,10 +18,6 @@ class Master extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function bom(){
-        return $this->belongsToMany(Bom::class);
-    }
-
     public function size(){
         return $this->hasMany(Size::class);
     }
