@@ -16,10 +16,6 @@ class Color extends Model
         return $this->hasMany(Helmet::class);
     }
 
-    public function medicine(){
-        return $this->hasMany(Medicine::class);
-    }
-
     public function general(){
         return $this->hasMany(General::class);
     }
