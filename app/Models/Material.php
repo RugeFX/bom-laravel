@@ -9,6 +9,7 @@ class Material extends Model
 {
     use HasFactory;
 
+    protected $table = "material_master";
     protected $fillable = [
         'item_code'
     ];

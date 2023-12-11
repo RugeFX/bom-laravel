@@ -10,6 +10,7 @@ class Helmet extends Model
 {
     use HasFactory;
 
+    protected $table = "helmets_master";
     protected $fillable = [
         'name',
         'item_code',
@@ -29,5 +30,22 @@ class Helmet extends Model
 
     public function color(){
         return $this->belongsTo(Color::class);
+    }
+
+    public function material() {
+        return $this->belongsTo(Material::class, "item_code", "item_code");
+    }
+
+    public static function booted(): void
+    {
+        static::created(fn (Helmet $model) =>
+            $model->material()->create([
+                "item_code" => $model->item_code
+            ])
+        );
+
+        static::deleted(fn (Helmet $model) =>
+            $model->material()->where("item_code", "=", $model->item_code)->delete()
+        );
     }
 }

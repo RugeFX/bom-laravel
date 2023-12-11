@@ -9,6 +9,7 @@ class Hardcase extends Model
 {
     use HasFactory;
 
+    protected $table = "hardcases_master";
     protected $fillable = [
         'name',
         'item_code',
@@ -28,5 +29,22 @@ class Hardcase extends Model
     
     public function color(){
         return $this->belongsTo(Color::class);
+    }
+
+    public function material() {
+        return $this->belongsTo(Material::class, "item_code", "item_code");
+    }
+
+    public static function booted(): void
+    {
+        static::created(fn (Hardcase $model) =>
+            $model->material()->create([
+                "item_code" => $model->item_code
+            ])
+        );
+
+        static::deleted(fn (Hardcase $model) =>
+            $model->material()->where("item_code", "=", $model->item_code)->delete()
+        );
     }
 }

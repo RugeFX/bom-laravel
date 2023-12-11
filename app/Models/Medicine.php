@@ -9,6 +9,7 @@ class Medicine extends Model
 {
     use HasFactory;
 
+    protected $table = "medicines_master";
     protected $fillable = [
         'name',
         'item_code',
@@ -18,5 +19,22 @@ class Medicine extends Model
 
     public function master(){
         return $this->belongsTo(Master::class);
+    }
+
+    public function material() {
+        return $this->belongsTo(Material::class, "item_code", "item_code");
+    }
+
+    public static function booted(): void
+    {
+        static::created(fn (Medicine $model) =>
+            $model->material()->create([
+                "item_code" => $model->item_code
+            ])
+        );
+
+        static::deleted(fn (Medicine $model) =>
+            $model->material()->where("item_code", "=", $model->item_code)->delete()
+        );
     }
 }
