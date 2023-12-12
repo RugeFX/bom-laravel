@@ -24,16 +24,8 @@ class BomController extends Controller
             $bom = handle_relations($relations, $this->possible_relations, $bom);
         }
         return response()->json([
-            "data"=>$bom->get()
-        ],Response::HTTP_OK);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+            "data" => $bom->get()
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -41,33 +33,32 @@ class BomController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'bom_code'=>'required|string',
-            'item'=>'required|array',
-            'item.*.bom_code'=>'required|string',
-            'item.*.item_code'=>'required|string',
-            'item.*.quantity'=>'required|integer',
+        $validator = Validator::make($request->all(), [
+            'bom_code' => 'required|string',
+            'item' => 'required|array',
+            'item.*.bom_code' => 'required|string',
+            'item.*.item_code' => 'required|string',
+            'item.*.quantity' => 'required|integer',
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
-                "message"=>$validator->errors(),
-            ],Response::HTTP_BAD_REQUEST);
+                "message" => $validator->errors(),
+            ], Response::HTTP_BAD_REQUEST);
         }
         $validated = $validator->validated();
         $bom = convert_array($validated["item"]);
-        try{
-            $newValue= Bom::create([
-                "bom_code"=>$validated['bom_code'],
+        try {
+            $newValue = Bom::create([
+                "bom_code" => $validated['bom_code'],
             ]);
             $newValue->material()->sync($bom);
-        }
-        catch(\Exception $e){
+        } catch (\Exception $e) {
             return $e;
         }
         return response()->json([
-            "message"=>"Data Berhasil dibuat",
-            "data"=>$newValue
-        ],Response::HTTP_OK);
+            "message" => "Data Berhasil dibuat",
+            "data" => $newValue
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -88,14 +79,6 @@ class BomController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
@@ -110,7 +93,7 @@ class BomController extends Controller
     {
         $bom->delete();
         return response()->json([
-            "message"=>"Data Berhasil didelete",
-        ],Response::HTTP_OK);
+            "message" => "Data Berhasil didelete",
+        ], Response::HTTP_OK);
     }
 }
