@@ -9,12 +9,11 @@ use Illuminate\Support\Facades\Validator;
 
 class SizemasterController extends Controller
 {
+    public $possible_relations = ["master", "hardcase", "helmet"];
+
     /**
      * Display a listing of the resource.
      */
-
-    public $possible_relations = ["master", "hardcase", "helmet"];
-
     public function index(Request $request)
     {
         $relations = $request->input("relations");
@@ -27,14 +26,6 @@ class SizemasterController extends Controller
         return response()->json([
             "data" => $size->get()
         ], Response::HTTP_OK);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -82,14 +73,6 @@ class SizemasterController extends Controller
 
 
         return $size->findOrFail($id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**

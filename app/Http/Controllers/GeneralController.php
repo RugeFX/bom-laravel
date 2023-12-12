@@ -10,12 +10,23 @@ use Illuminate\Validation\ValidationException;
 class GeneralController extends Controller
 {
     /**
+     * The controller main model's array of possible relations.
+     */
+    public $possible_relations = ["color", "master", "material"];
+
+    /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = General::all();
-        return response()->json(["message" => "Success", "data" => $data]);
+        $data = new General;
+
+        $relations = $request->input("relations");
+        if ($relations) {
+            $data = handle_relations($relations, $this->possible_relations, $data);
+        }
+
+        return response()->json(["message" => "Success", "data" => $data->get()]);
     }
 
     /**
@@ -46,15 +57,21 @@ class GeneralController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
-        $data = General::query()->with(["color"])->find($id);
+        $data = new General;
 
+        $relations = $request->input("relations");
+        if ($relations) {
+            $data = handle_relations($relations, $this->possible_relations, $data);
+        }
+
+        $data = $data->find($id);
         if (!$data) {
             return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
         }
 
-        return response()->json(["message" => "Success", "data" => $data], Response::HTTP_NOT_FOUND);
+        return response()->json(["message" => "Success", "data" => $data]);
     }
 
     /**
@@ -78,7 +95,7 @@ class GeneralController extends Controller
 
             $data->update($validated);
 
-            return response()->json(["message" => "Success", "data" => $data], Response::HTTP_BAD_REQUEST);
+            return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {
             if ($ex instanceof ValidationException) {
                 return response()->json(["message" => "Failed", "error" => $ex->errors()], Response::HTTP_BAD_REQUEST);
@@ -100,6 +117,6 @@ class GeneralController extends Controller
 
         $data->delete();
 
-        return response()->json(["message" => "Success"], 200);
+        return response()->json(["message" => "Success"]);
     }
 }

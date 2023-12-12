@@ -16,7 +16,6 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $relations = $request->input("relations");
-        // $fields = $request->input("fields");
 
         $category = new Category();
 
@@ -26,14 +25,6 @@ class CategoryController extends Controller
         return response()->json([
             "data" => $category->get()
         ], Response::HTTP_OK);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -80,14 +71,6 @@ class CategoryController extends Controller
 
 
         return $category->findOrFail($id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
