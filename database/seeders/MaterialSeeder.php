@@ -6,14 +6,14 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class MaterialMasterSeeder extends Seeder
+class MaterialSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DB::table("material_master")->insert([
+        DB::table("materials")->insert([
             ["item_code" => "HCS001", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
             ["item_code" => "HCS002", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
             ["item_code" => "HLMADLT", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],

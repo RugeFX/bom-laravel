@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('generals_master', function (Blueprint $table) {
+        Schema::create('material_bom', function (Blueprint $table) {
             $table->id();
-            $table->string("item_code")->unique();
-            $table->string("name");
             $table->integer("quantity");
-            $table->string("master_code");
-            $table->foreign("master_code")->references("master_code")->on('masters')->onDelete("cascade");
-            $table->foreignId("color_id")->constrained('colors')->onDelete("cascade");
+            $table->string("item_code");
+            $table->string("bom_code");
+            $table->foreign("bom_code")->references("bom_code")->on('boms')->onDelete('cascade');
+            $table->foreign("item_code")->references("item_code")->on('materials')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('generals_master');
+        Schema::dropIfExists('bom_material_master');
     }
 };

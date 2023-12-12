@@ -15,31 +15,31 @@ class SizeSeeder extends Seeder
     {
         DB::table("sizes")->insert([
             [
-                "master_id" => 1,
+                "master_code" => "MSHLMT",
                 "name" => "S",
                 "created_at" => \Carbon\Carbon::now(), 
                 "updated_at" => \Carbon\Carbon::now()
             ],
             [
-                "master_id" => 1,
+                "master_code" => "MSHLMT",
                 "name" => "L",
                 "created_at" => \Carbon\Carbon::now(), 
                 "updated_at" => \Carbon\Carbon::now()
             ],
             [
-                "master_id" => 1,
+                "master_code" => "MSHLMT",
                 "name" => "XL",
                 "created_at" => \Carbon\Carbon::now(), 
                 "updated_at" => \Carbon\Carbon::now()
             ],
             [
-                "master_id" => 4,
+                "master_code" => "MSHRCS",
                 "name" => "HC1",
                 "created_at" => \Carbon\Carbon::now(), 
                 "updated_at" => \Carbon\Carbon::now()
             ],
             [
-                "master_id" => 4,
+                "master_code" => "MSHRCS",
                 "name" => "HC2",
                 "created_at" => \Carbon\Carbon::now(), 
                 "updated_at" => \Carbon\Carbon::now()

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BomController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColormasterController;
 use App\Http\Controllers\GeneralController;
@@ -31,6 +32,7 @@ Route::apiResource("generals", GeneralController::class);
 Route::apiResource("hardcases", HardcaseController::class);
 Route::apiResource("helmets", HelmetController::class);
 Route::apiResource("medicines", MedicineController::class);
+Route::apiResource('bom',BomController::class);
 
 Route::get("materials", fn() =>  Material::all());
 

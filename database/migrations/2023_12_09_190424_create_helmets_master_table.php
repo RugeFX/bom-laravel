@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string("item_code")->unique();
             $table->string("name");
             $table->integer("quantity");
-            $table->foreignId("master_id")->constrained("masters")->onDelete("cascade");
+            $table->string("master_code");
+            $table->foreign("master_code")->references("master_code")->on('masters')->onDelete("cascade");
             $table->foreignId("size_id")->constrained('sizes')->onDelete("cascade");
             $table->timestamps();
         });

@@ -15,7 +15,7 @@ class GeneralSeeder extends Seeder
     {
         DB::table('generals_master')->insert([
             [
-                "master_id" => 3,
+                "master_code" => "MSGNRL",
                 "item_code" => "MTRPCX",
                 "name" => "PCX",
                 "quantity" => 5,
@@ -24,7 +24,7 @@ class GeneralSeeder extends Seeder
                 "updated_at" => \Carbon\Carbon::now()
             ],
             [
-                "master_id" => 3,
+                "master_code" => "MSGNRL",
                 "item_code" => "MTRNMX",
                 "name" => "NMAX",
                 "quantity" => 5,
@@ -33,7 +33,7 @@ class GeneralSeeder extends Seeder
                 "updated_at" => \Carbon\Carbon::now()
             ],
             [
-                "master_id" => 3,
+                "master_code" => "MSGNRL",
                 "item_code" => "MTRSCP",
                 "name" => "SCOOPY",
                 "quantity" => 12,

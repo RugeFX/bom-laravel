@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bom_material_master', function (Blueprint $table) {
+        Schema::create('materials', function (Blueprint $table) {
             $table->id();
-            $table->integer("quantity");
-            $table->string("item_code");
-            $table->string("bom_code");
+            $table->string("item_code")->unique();
             $table->timestamps();
         });
     }
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bom_material_master');
+        Schema::dropIfExists('material_master');
     }
 };

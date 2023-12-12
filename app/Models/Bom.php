@@ -16,6 +16,6 @@ class Bom extends Model
     ];
 
     public function material(){
-        return $this->belongsToMany(Material::class,'item_code','item_code')->withPivot('quantity');
+        return $this->belongsToMany(Material::class, 'material_bom', 'bom_code', 'item_code')->withPivot('quantity');
     }
 }

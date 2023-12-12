@@ -19,22 +19,22 @@ class Master extends Model
     }
 
     public function size(){
-        return $this->hasMany(Size::class);
+        return $this->hasMany(Size::class,"master_code","master_code");
     }
 
     public function helmet(){
-        return $this->hasMany(Helmet::class);
+        return $this->hasMany(Helmet::class,"master_code","master_code");
     }
 
     public function medicine(){
-        return $this->hasMany(Medicine::class);
+        return $this->hasMany(Medicine::class,"master_code","master_code");
     }
 
     public function general(){
-        return $this->hasMany(General::class);
+        return $this->hasMany(General::class,"master_code","master_code");
     }
 
     public function hardcase(){
-        return $this->hasMany(Hardcase::class);
+        return $this->hasMany(Hardcase::class,"master_code","master_code");
     }
 }
