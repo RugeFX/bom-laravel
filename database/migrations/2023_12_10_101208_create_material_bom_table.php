@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bom_material_master', function (Blueprint $table) {
+        Schema::create('material_bom', function (Blueprint $table) {
             $table->id();
             $table->integer("quantity");
             $table->string("item_code");
             $table->string("bom_code");
             $table->foreign("bom_code")->references("bom_code")->on('boms')->onDelete('cascade');
-            $table->foreign("item_code")->references("item_code")->on('material_master')->onDelete('cascade');
+            $table->foreign("item_code")->references("item_code")->on('materials')->onDelete('cascade');
             $table->timestamps();
         });
     }

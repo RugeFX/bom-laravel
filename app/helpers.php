@@ -38,14 +38,13 @@ if(!function_exists('convert_array')){
     {
         $result = [];
         foreach ($data as $piece) {
-            $result[$piece["id"]] = [];
+            $result[$piece["item_code"]] = [];
 
             if ($piece["quantity"] ?? false) {
-                $result[$piece["id"]]["quantity"] = $piece["quantity"];
+                $result[$piece["item_code"]]["quantity"] = $piece["quantity"];
             }
-
-            if ($piece["coli"] ?? false) {
-                $result[$piece["id"]]["coli"] = $piece["coli"];
+            if ($piece["bom_code"] ?? false) {
+                $result[$piece["item_code"]]["bom_code"] = $piece["bom_code"];
             }
         }
         return $result;
