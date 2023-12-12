@@ -19,7 +19,7 @@ class Hardcase extends Model
     ];
 
     public function master(){
-        return $this->belongsTo(Master::class);
+        return $this->belongsTo(Master::class,"master_code","master_code");
     }
 
     public function size(){

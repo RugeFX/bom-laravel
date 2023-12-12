@@ -9,6 +9,8 @@ class BomController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public $possible_relations = ["material"];
+
     public function index()
     {
         //

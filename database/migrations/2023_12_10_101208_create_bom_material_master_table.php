@@ -16,6 +16,8 @@ return new class extends Migration
             $table->integer("quantity");
             $table->string("item_code");
             $table->string("bom_code");
+            $table->foreign("bom_code")->references("bom_code")->on('boms')->onDelete('cascade');
+            $table->foreign("item_code")->references("item_code")->on('material_master')->onDelete('cascade');
             $table->timestamps();
         });
     }

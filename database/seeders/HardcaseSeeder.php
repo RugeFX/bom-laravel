@@ -15,7 +15,7 @@ class HardcaseSeeder extends Seeder
     {
         DB::table("hardcases_master")->insert([
             [
-                "master_id" => 4,
+                "master_code" => "MSHRCS",
                 "item_code" => "HCS001",
                 "name" => "Hardcase 1",
                 "quantity" => 18,
@@ -25,7 +25,7 @@ class HardcaseSeeder extends Seeder
                 "updated_at" => \Carbon\Carbon::now()
             ],
             [
-                "master_id" => 4,
+                "master_code" => "MSHRCS",
                 "item_code" => "HCS002",
                 "name" => "Hardcase 2",
                 "quantity" => 33,

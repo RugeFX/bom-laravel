@@ -18,7 +18,6 @@ class SizemasterController extends Controller
     public function index(Request $request)
     {
         $relations = $request->input("relations");
-        // $fields = $request->input("fields");
 
         $size = new Size();
 
