@@ -24,8 +24,8 @@ class ColormasterController extends Controller
             $color = handle_relations($relations, $this->possible_relations, $color);
         }
         return response()->json([
-            "data"=>$color->get()
-        ],Response::HTTP_OK);
+            "data" => $color->get()
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -41,29 +41,28 @@ class ColormasterController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-                'name'=>"required|string"
+        $validator = Validator::make($request->all(), [
+            'name' => "required|string"
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
-                "message"=>$validator->errors()
-            ],Response::HTTP_BAD_REQUEST);
+                "message" => $validator->errors()
+            ], Response::HTTP_BAD_REQUEST);
         }
         $validated = $validator->validated();
 
-        try{
-            $newValue= Color::create($validated);
-        }
-        catch(\Exception $e){
+        try {
+            $newValue = Color::create($validated);
+        } catch (\Exception $e) {
             return response()->json([
-                "error"=>$e
-            ],Response::HTTP_BAD_REQUEST);
+                "error" => $e
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         return response()->json([
-            "message"=>"Data Berhasil dibuat",
-            "data"=>$newValue,
-        ],Response::HTTP_OK);
+            "message" => "Data Berhasil dibuat",
+            "data" => $newValue,
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -96,29 +95,28 @@ class ColormasterController extends Controller
      */
     public function update(Request $request, Color $color)
     {
-        $validator = Validator::make($request->all(),[
-                'name'=>"string"
+        $validator = Validator::make($request->all(), [
+            'name' => "string"
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
-                "message"=>$validator->errors()
-            ],Response::HTTP_BAD_REQUEST);
+                "message" => $validator->errors()
+            ], Response::HTTP_BAD_REQUEST);
         }
         $validated = $validator->validated();
 
-        try{
-        $color->update($validated);
-        }
-        catch(\Exception $e){
+        try {
+            $color->update($validated);
+        } catch (\Exception $e) {
             return response()->json([
-                "error"=>$e
-            ],Response::HTTP_BAD_REQUEST);
+                "error" => $e
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         return response()->json([
-            "message"=>"Data Berhasil diupdate",
-            "data"=>$color,
-        ],Response::HTTP_OK);
+            "message" => "Data Berhasil diupdate",
+            "data" => $color,
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -128,7 +126,7 @@ class ColormasterController extends Controller
     {
         $color->delete();
         return response()->json([
-            "message"=>"Data Berhasil didelete",
-        ],Response::HTTP_OK);
+            "message" => "Data Berhasil didelete",
+        ], Response::HTTP_OK);
     }
 }

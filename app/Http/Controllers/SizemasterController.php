@@ -25,8 +25,8 @@ class SizemasterController extends Controller
             $size = handle_relations($relations, $this->possible_relations, $size);
         }
         return response()->json([
-            "data"=>$size->get()
-        ],Response::HTTP_OK);
+            "data" => $size->get()
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -42,30 +42,29 @@ class SizemasterController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-                'name'=>"required|string",
-                'master_id'=>'required|integer'
+        $validator = Validator::make($request->all(), [
+            'name' => "required|string",
+            'master_id' => 'required|integer'
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
-                "message"=>$validator->errors()
-            ],Response::HTTP_BAD_REQUEST);
+                "message" => $validator->errors()
+            ], Response::HTTP_BAD_REQUEST);
         }
         $validated = $validator->validated();
 
-        try{
-            $newValue= Size::create($validated);
-        }
-        catch(\Exception $e){
+        try {
+            $newValue = Size::create($validated);
+        } catch (\Exception $e) {
             return response()->json([
-                "error"=>$e
-            ],Response::HTTP_BAD_REQUEST);
+                "error" => $e
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         return response()->json([
-            "message"=>"Data Berhasil dibuat",
-            "data"=>$newValue,
-        ],Response::HTTP_OK);
+            "message" => "Data Berhasil dibuat",
+            "data" => $newValue,
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -98,30 +97,29 @@ class SizemasterController extends Controller
      */
     public function update(Request $request, Size $size)
     {
-        $validator = Validator::make($request->all(),[
-                'name'=>"string",
-                'master_id'=>'integer'
+        $validator = Validator::make($request->all(), [
+            'name' => "string",
+            'master_id' => 'integer'
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
-                "message"=>$validator->errors()
-            ],Response::HTTP_BAD_REQUEST);
+                "message" => $validator->errors()
+            ], Response::HTTP_BAD_REQUEST);
         }
         $validated = $validator->validated();
 
-        try{
-        $size->update($validated);
-        }
-        catch(\Exception $e){
+        try {
+            $size->update($validated);
+        } catch (\Exception $e) {
             return response()->json([
-                "error"=>$e
-            ],Response::HTTP_BAD_REQUEST);
+                "error" => $e
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         return response()->json([
-            "message"=>"Data Berhasil diupdate",
-            "data"=>$size,
-        ],Response::HTTP_OK);
+            "message" => "Data Berhasil diupdate",
+            "data" => $size,
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -131,7 +129,7 @@ class SizemasterController extends Controller
     {
         $size->delete();
         return response()->json([
-            "message"=>"Data Berhasil didelete",
-        ],Response::HTTP_OK);
+            "message" => "Data Berhasil didelete",
+        ], Response::HTTP_OK);
     }
 }

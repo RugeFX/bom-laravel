@@ -19,31 +19,37 @@ class Hardcase extends Model
         'master_id'
     ];
 
-    public function master(){
-        return $this->belongsTo(Master::class,"master_code","master_code");
+    public function master()
+    {
+        return $this->belongsTo(Master::class, "master_code", "master_code");
     }
 
-    public function size(){
+    public function size()
+    {
         return $this->belongsTo(Size::class);
     }
-    
-    public function color(){
+
+    public function color()
+    {
         return $this->belongsTo(Color::class);
     }
 
-    public function material() {
+    public function material()
+    {
         return $this->belongsTo(Material::class, "item_code", "item_code");
     }
 
     public static function booted(): void
     {
-        static::created(fn (Hardcase $model) =>
+        static::created(
+            fn (Hardcase $model) =>
             $model->material()->create([
                 "item_code" => $model->item_code
             ])
         );
 
-        static::deleted(fn (Hardcase $model) =>
+        static::deleted(
+            fn (Hardcase $model) =>
             $model->material()->where("item_code", "=", $model->item_code)->delete()
         );
     }

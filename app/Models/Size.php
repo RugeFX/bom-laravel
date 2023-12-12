@@ -14,13 +14,16 @@ class Size extends Model
         'master_id'
     ];
 
-    public function master(){
-        return $this->belongsTo(Master::class,"master_code","master_code");
+    public function master()
+    {
+        return $this->belongsTo(Master::class, "master_code", "master_code");
     }
-    public function hardcase(){
+    public function hardcase()
+    {
         return $this->hasMany(Hardcase::class);
     }
-    public function helmet(){
+    public function helmet()
+    {
         return $this->hasMany(Helmet::class);
     }
 }

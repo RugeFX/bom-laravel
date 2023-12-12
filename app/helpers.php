@@ -33,7 +33,7 @@ if (!function_exists("handle_relations")) {
         return $model;
     }
 }
-if(!function_exists('convert_array')){
+if (!function_exists('convert_array')) {
     function convert_array(array $data)
     {
         $result = [];

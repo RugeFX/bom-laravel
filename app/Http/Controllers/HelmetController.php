@@ -23,7 +23,7 @@ class HelmetController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        try {
             $validated = $request->validate([
                 "item_code" => "required|string|unique:material_master,item_code",
                 "name" => "required|string",
@@ -37,7 +37,7 @@ class HelmetController extends Controller
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {
-            if($ex instanceof ValidationException) {
+            if ($ex instanceof ValidationException) {
                 return response()->json(["message" => "Failed", "error" => $ex->errors()], Response::HTTP_BAD_REQUEST);
             }
             return response()->json(["message" => "Failed", "error" => $ex->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -51,7 +51,7 @@ class HelmetController extends Controller
     {
         $data = Helmet::query()->with(["size", "color"])->find($id);
 
-        if(!$data) {
+        if (!$data) {
             return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
         }
 
@@ -65,11 +65,11 @@ class HelmetController extends Controller
     {
         $data = Helmet::query()->find($id);
 
-        if(!$data) {
+        if (!$data) {
             return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
         }
-        
-        try{
+
+        try {
             $validated = $request->validate([
                 "item_code" => "string|unique:material_master,item_code," . $request->input("item_code"),
                 "name" => "string",
@@ -77,12 +77,12 @@ class HelmetController extends Controller
                 "color_id" => "integer|exists:colors,id",
                 "size_id" => "integer|exists:sizes,id",
             ]);
-            
+
             $data->update($validated);
 
             return response()->json(["message" => "Success", "data" => $data], Response::HTTP_BAD_REQUEST);
         } catch (\Exception $ex) {
-            if($ex instanceof ValidationException) {
+            if ($ex instanceof ValidationException) {
                 return response()->json(["message" => "Failed", "error" => $ex->errors()], Response::HTTP_BAD_REQUEST);
             }
             return response()->json(["message" => "Failed", "error" => $ex->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -96,7 +96,7 @@ class HelmetController extends Controller
     {
         $data = Helmet::query()->find($id);
 
-        if(!$data) {
+        if (!$data) {
             return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
         }
 

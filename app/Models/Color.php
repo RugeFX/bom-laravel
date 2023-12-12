@@ -12,15 +12,18 @@ class Color extends Model
         'name'
     ];
 
-    public function helmet(){
+    public function helmet()
+    {
         return $this->hasMany(Helmet::class);
     }
 
-    public function general(){
+    public function general()
+    {
         return $this->hasMany(General::class);
     }
-    
-    public function hardcase(){
+
+    public function hardcase()
+    {
         return $this->hasMany(Hardcase::class);
     }
 }

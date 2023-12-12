@@ -24,8 +24,8 @@ class CategoryController extends Controller
             $category = handle_relations($relations, $this->possible_relations, $category);
         }
         return response()->json([
-            "data"=>$category->get()
-        ],Response::HTTP_OK);
+            "data" => $category->get()
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -41,29 +41,28 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'name'=>"required|string"
+        $validator = Validator::make($request->all(), [
+            'name' => "required|string"
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
-                "message"=>$validator->errors()
-            ],Response::HTTP_BAD_REQUEST);
+                "message" => $validator->errors()
+            ], Response::HTTP_BAD_REQUEST);
         }
         $validated = $validator->validated();
 
-        try{
-            $newValue= Category::create($validated);
-        }
-        catch(\Exception $e){
+        try {
+            $newValue = Category::create($validated);
+        } catch (\Exception $e) {
             return response()->json([
-                "error"=>$e
-            ],Response::HTTP_BAD_REQUEST);
+                "error" => $e
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         return response()->json([
-            "message"=>"Data Berhasil dibuat",
-            "data"=>$newValue,
-        ],Response::HTTP_OK);
+            "message" => "Data Berhasil dibuat",
+            "data" => $newValue,
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -96,39 +95,38 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $validator = Validator::make($request->all(),[
-            'name'=>"string"
+        $validator = Validator::make($request->all(), [
+            'name' => "string"
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
-                "message"=>$validator->errors()
-            ],Response::HTTP_BAD_REQUEST);
+                "message" => $validator->errors()
+            ], Response::HTTP_BAD_REQUEST);
         }
         $validated = $validator->validated();
 
-        try{
-        $category->update($validated);
-        }
-        catch(\Exception $e){
+        try {
+            $category->update($validated);
+        } catch (\Exception $e) {
             return response()->json([
-                "error"=>$e
-            ],Response::HTTP_BAD_REQUEST);
+                "error" => $e
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         return response()->json([
-            "message"=>"Data Berhasil diupdate",
-            "data"=>$category,
-        ],Response::HTTP_OK);
+            "message" => "Data Berhasil diupdate",
+            "data" => $category,
+        ], Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy( Category $category)
+    public function destroy(Category $category)
     {
         $category->delete();
         return response()->json([
-            "message"=>"Data Berhasil didelete",
-        ],Response::HTTP_OK);
+            "message" => "Data Berhasil didelete",
+        ], Response::HTTP_OK);
     }
 }

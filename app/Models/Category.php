@@ -12,7 +12,8 @@ class Category extends Model
         'name'
     ];
 
-    public function master(){
+    public function master()
+    {
         return $this->hasMany(Master::class);
     }
 }

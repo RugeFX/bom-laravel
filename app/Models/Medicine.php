@@ -17,23 +17,27 @@ class Medicine extends Model
         'quantity'
     ];
 
-    public function master(){
-        return $this->belongsTo(Master::class,"master_code","master_code");
+    public function master()
+    {
+        return $this->belongsTo(Master::class, "master_code", "master_code");
     }
 
-    public function material() {
+    public function material()
+    {
         return $this->belongsTo(Material::class, "item_code", "item_code");
     }
 
     public static function booted(): void
     {
-        static::created(fn (Medicine $model) =>
+        static::created(
+            fn (Medicine $model) =>
             $model->material()->create([
                 "item_code" => $model->item_code
             ])
         );
 
-        static::deleted(fn (Medicine $model) =>
+        static::deleted(
+            fn (Medicine $model) =>
             $model->material()->where("item_code", "=", $model->item_code)->delete()
         );
     }

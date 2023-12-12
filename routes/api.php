@@ -24,17 +24,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('categories',CategoryController::class);
-Route::apiResource('colors',ColormasterController::class);
-Route::apiResource('sizes',SizemasterController::class);
+Route::apiResource('categories', CategoryController::class);
+Route::apiResource('colors', ColormasterController::class);
+Route::apiResource('sizes', SizemasterController::class);
 Route::apiResource("masters", MasterController::class);
 Route::apiResource("generals", GeneralController::class);
 Route::apiResource("hardcases", HardcaseController::class);
 Route::apiResource("helmets", HelmetController::class);
 Route::apiResource("medicines", MedicineController::class);
-Route::apiResource('bom',BomController::class);
+Route::apiResource('boms', BomController::class);
 
-Route::get("materials", fn() =>  Material::all());
+Route::get("materials", fn () =>  Material::all());
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

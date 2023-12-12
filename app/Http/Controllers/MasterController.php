@@ -23,7 +23,7 @@ class MasterController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        try {
             $validated = $request->validate([
                 "category_id" => "required|integer|exists:categories,id",
                 "code" => "required|string|unique:masters"
@@ -34,7 +34,7 @@ class MasterController extends Controller
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {
-            if($ex instanceof ValidationException) {
+            if ($ex instanceof ValidationException) {
                 return response()->json(["message" => "Failed", "error" => $ex->errors()], Response::HTTP_BAD_REQUEST);
             }
             return response()->json(["message" => "Failed", "error" => $ex->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -48,7 +48,7 @@ class MasterController extends Controller
     {
         $data = Master::query()->with(["category", "size", "helmet", "medicine", "general", "hardcase"])->find($id);
 
-        if(!$data) {
+        if (!$data) {
             return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
         }
 
@@ -62,11 +62,11 @@ class MasterController extends Controller
     {
         $data = Master::query()->find($id);
 
-        if(!$data) {
+        if (!$data) {
             return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
         }
-        
-        try{
+
+        try {
             $validated = $request->validate([
                 "category_id" => "integer|exists:categories,id",
                 "code" => "string|unique:masters"
@@ -75,7 +75,7 @@ class MasterController extends Controller
 
             return response()->json(["message" => "Success", "data" => $data], Response::HTTP_BAD_REQUEST);
         } catch (\Exception $ex) {
-            if($ex instanceof ValidationException) {
+            if ($ex instanceof ValidationException) {
                 return response()->json(["message" => "Failed", "error" => $ex->errors()], Response::HTTP_BAD_REQUEST);
             }
             return response()->json(["message" => "Failed", "error" => $ex->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -89,7 +89,7 @@ class MasterController extends Controller
     {
         $data = Master::query()->find($id);
 
-        if(!$data) {
+        if (!$data) {
             return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
         }
 
