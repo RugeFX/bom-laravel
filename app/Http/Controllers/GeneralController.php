@@ -87,13 +87,17 @@ class GeneralController extends Controller
 
         try {
             $validated = $request->validate([
-                "item_code" => "string|unique:material_master,item_code," . $request->input("item_code"),
+                "item_code" => "string|unique:material_master,item_code",
                 "name" => "string",
                 "quantity" => "integer",
                 "color_id" => "integer|exists:colors,id",
             ]);
 
-            $data->update($validated);
+            $data->fill($validated);
+            $data->save();
+
+            $data->material()->item_code = $validated["item_code"];
+            $data->material()->save();
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {

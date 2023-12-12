@@ -49,8 +49,7 @@ class Hardcase extends Model
         );
 
         static::deleted(
-            fn (Hardcase $model) =>
-            $model->material()->where("item_code", "=", $model->item_code)->delete()
+            fn (Hardcase $model) => $model->material()->delete()
         );
     }
 }
