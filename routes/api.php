@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BomController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColormasterController;
 use App\Http\Controllers\SizemasterController;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::apiResource('category',CategoryController::class);
+Route::apiResource('bom',BomController::class);
 Route::apiResource('color',ColormasterController::class);
 Route::apiResource('size',SizemasterController::class);
 
