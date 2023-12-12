@@ -15,7 +15,7 @@ class MedicineSeeder extends Seeder
     {
         DB::table("medicines_master")->insert([
             [
-                "master_id" => 2,
+                "master_code" => "MSMDCN",
                 "item_code" => "MDCBNDG",
                 "name" => "Bandage",
                 "quantity" => 50,
@@ -23,7 +23,7 @@ class MedicineSeeder extends Seeder
                 "updated_at" => \Carbon\Carbon::now()
             ],
             [
-                "master_id" => 2,
+                "master_code" => "MSMDCN",
                 "item_code" => "MDCSCSR",
                 "name" => "Scissors",
                 "quantity" => 50,
@@ -31,7 +31,7 @@ class MedicineSeeder extends Seeder
                 "updated_at" => \Carbon\Carbon::now()
             ],
             [
-                "master_id" => 2,
+                "master_code" => "MSMDCN",
                 "item_code" => "MDCTHRM",
                 "name" => "Thermometer",
                 "quantity" => 50,
@@ -39,7 +39,7 @@ class MedicineSeeder extends Seeder
                 "updated_at" => \Carbon\Carbon::now()
             ],
             [
-                "master_id" => 2,
+                "master_code" => "MSMDCN",
                 "item_code" => "MDCTWZR",
                 "name" => "Tweezer",
                 "quantity" => 50,

@@ -15,25 +15,25 @@ class MasterSeeder extends Seeder
     {
         DB::table('masters')->insert([
             [
-                "code" => "MSHLMT",
+                "master_code" => "MSHLMT",
                 "category_id" => 1,
                 "created_at" =>  \Carbon\Carbon::now(), 
                 "updated_at" => \Carbon\Carbon::now(),
             ],
             [
-                "code" => "MSMDCN",
+                "master_code" => "MSMDCN",
                 "category_id" => 2,
                 "created_at" =>  \Carbon\Carbon::now(), 
                 "updated_at" => \Carbon\Carbon::now(),
             ],
             [
-                "code" => "MSGNRL",
+                "master_code" => "MSGNRL",
                 "category_id" => 1,
                 "created_at" =>  \Carbon\Carbon::now(), 
                 "updated_at" => \Carbon\Carbon::now(),
             ],
             [
-                "code" => "MSHRCS",
+                "master_code" => "MSHRCS",
                 "category_id" => 3,
                 "created_at" =>  \Carbon\Carbon::now(), 
                 "updated_at" => \Carbon\Carbon::now(),

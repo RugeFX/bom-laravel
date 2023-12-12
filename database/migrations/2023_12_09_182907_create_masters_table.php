@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('masters', function (Blueprint $table) {
             $table->id();
             $table->foreignId("category_id")->constrained("categories")->onDelete('cascade');
-            $table->string("code");
+            $table->string("master_code")->unique();
             $table->timestamps();
         });
     }

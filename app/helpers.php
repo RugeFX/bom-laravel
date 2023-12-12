@@ -33,3 +33,21 @@ if (!function_exists("handle_relations")) {
         return $model;
     }
 }
+if(!function_exists('convert_array')){
+    function convert_array(array $data)
+    {
+        $result = [];
+        foreach ($data as $piece) {
+            $result[$piece["id"]] = [];
+
+            if ($piece["quantity"] ?? false) {
+                $result[$piece["id"]]["quantity"] = $piece["quantity"];
+            }
+
+            if ($piece["coli"] ?? false) {
+                $result[$piece["id"]]["coli"] = $piece["coli"];
+            }
+        }
+        return $result;
+    }
+}

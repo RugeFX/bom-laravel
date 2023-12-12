@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('sizes', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->foreignId("master_id")->constrained("masters")->onDelete("cascade");
+            $table->string("master_code");
+            $table->foreign("master_code")->references("master_code")->on('masters')->onDelete("cascade");
             $table->timestamps();
         });
     }

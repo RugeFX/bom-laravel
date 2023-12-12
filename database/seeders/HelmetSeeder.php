@@ -15,7 +15,7 @@ class HelmetSeeder extends Seeder
     {
         DB::table("helmets_master")->insert([
             [
-                "master_id" => 1,
+                "master_code" => "MSHLMT",
                 "item_code" => "HLMADLT",
                 "name" => "Adult",
                 "quantity" => 26,
@@ -24,7 +24,7 @@ class HelmetSeeder extends Seeder
                 "updated_at" => \Carbon\Carbon::now()
             ],
             [
-                "master_id" => 1,
+                "master_code" => "MSHLMT",
                 "item_code" => "HLMKIDS",
                 "name" => "Kids",
                 "quantity" => 42,
