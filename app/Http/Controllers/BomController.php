@@ -24,6 +24,7 @@ class BomController extends Controller
             $bom = handle_relations($relations, $this->possible_relations, $bom);
         }
         return response()->json([
+            "message" => "Success",
             "data" => $bom->get()
         ], Response::HTTP_OK);
     }
@@ -36,13 +37,13 @@ class BomController extends Controller
         $validator = Validator::make($request->all(), [
             'bom_code' => 'required|string',
             'item' => 'required|array',
-            'item.*.bom_code' => 'required|string',
             'item.*.item_code' => 'required|string',
             'item.*.quantity' => 'required|integer',
         ]);
         if ($validator->fails()) {
             return response()->json([
-                "message" => $validator->errors(),
+                "message" => "Failed",
+                "error" => $validator->errors()
             ], Response::HTTP_BAD_REQUEST);
         }
         $validated = $validator->validated();
@@ -53,10 +54,13 @@ class BomController extends Controller
             ]);
             $newValue->material()->sync($bom);
         } catch (\Exception $e) {
-            return $e;
+            return response()->json([
+                "message" => "Failed",
+                "error" => $e,
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         return response()->json([
-            "message" => "Data Berhasil dibuat",
+            "message" => "Success",
             "data" => $newValue
         ], Response::HTTP_OK);
     }
@@ -74,16 +78,44 @@ class BomController extends Controller
             $bom = handle_relations($relations, $this->possible_relations,  $bom);
         }
 
-
-        return $bom->findOrFail($id);
+        return response()->json([
+            "message" => "Success",
+            "data" => $bom->findOrFail($id)
+        ], Response::HTTP_OK);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Bom $bom)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'bom_code' => 'string',
+            'item' => 'array',
+            'item.*.item_code' => 'string',
+            'item.*.quantity' => 'integer',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                "message" => "Failed",
+                "error" => $validator->errors()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        $validated = $validator->validated();
+        $boms = convert_array($validated["item"]);
+        try {
+            $bom->update($validated);
+            $bom->material()->sync($boms);
+        } catch (\Exception $e) {
+            return response()->json([
+                "message" => "Failed",
+                "error" => $e,
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        return response()->json([
+            "message" => "succses",
+            "data" => $bom
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -93,7 +125,7 @@ class BomController extends Controller
     {
         $bom->delete();
         return response()->json([
-            "message" => "Data Berhasil didelete",
+            "message" => "Success",
         ], Response::HTTP_OK);
     }
 }

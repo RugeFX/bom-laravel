@@ -24,6 +24,7 @@ class ColormasterController extends Controller
             $color = handle_relations($relations, $this->possible_relations, $color);
         }
         return response()->json([
+            "message" => "Success",
             "data" => $color->get()
         ], Response::HTTP_OK);
     }
@@ -70,8 +71,10 @@ class ColormasterController extends Controller
             $color = handle_relations($relations, $this->possible_relations,  $color);
         }
 
-
-        return $color->findOrFail($id);
+        return response()->json([
+            "message" => "Success",
+            "data" => $color->findOrFail($id)
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -98,7 +101,7 @@ class ColormasterController extends Controller
         }
 
         return response()->json([
-            "message" => "Data Berhasil diupdate",
+            "message" => "Success",
             "data" => $color,
         ], Response::HTTP_OK);
     }
@@ -110,7 +113,7 @@ class ColormasterController extends Controller
     {
         $color->delete();
         return response()->json([
-            "message" => "Data Berhasil didelete",
+            "message" => "Success",
         ], Response::HTTP_OK);
     }
 }
