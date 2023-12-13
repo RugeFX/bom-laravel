@@ -35,11 +35,11 @@ class MedicineController extends Controller
     {
         try {
             $validated = $request->validate([
-                "item_code" => "required|string|unique:material_master,item_code",
+                "item_code" => "required|string|unique:materials,item_code",
                 "name" => "required|string",
                 "quantity" => "required|integer",
             ]);
-            $validated["master_id"] = 2;
+            $validated["master_code"] = "MSMDCN";
 
             $data = Medicine::query()->create($validated);
 
@@ -85,12 +85,14 @@ class MedicineController extends Controller
 
         try {
             $validated = $request->validate([
-                "item_code" => "string|unique:material_master,item_code," . $request->input("item_code"),
+                "item_code" => "string|unique:materials,item_code," . $request->input("item_code"),
                 "name" => "string",
                 "quantity" => "integer",
             ]);
 
-            $data->update($validated);
+            $data->fill($validated);
+            $data->material->item_code = $validated["item_code"];
+            $data->push();
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {

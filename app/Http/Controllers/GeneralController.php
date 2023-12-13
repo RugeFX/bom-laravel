@@ -36,12 +36,12 @@ class GeneralController extends Controller
     {
         try {
             $validated = $request->validate([
-                "item_code" => "required|string|unique:material_master,item_code",
+                "item_code" => "required|string|unique:materials,item_code",
                 "name" => "required|string",
                 "quantity" => "required|integer",
                 "color_id" => "required|integer|exists:colors,id",
             ]);
-            $validated["master_id"] = 3;
+            $validated["master_code"] = "MSGNRL";
 
             $data = General::query()->create($validated);
 
@@ -79,7 +79,7 @@ class GeneralController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = General::query()->find($id);
+        $data = General::query()->with(["material"])->find($id);
 
         if (!$data) {
             return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
@@ -87,17 +87,15 @@ class GeneralController extends Controller
 
         try {
             $validated = $request->validate([
-                "item_code" => "string|unique:material_master,item_code",
+                "item_code" => "string|unique:materials,item_code",
                 "name" => "string",
                 "quantity" => "integer",
                 "color_id" => "integer|exists:colors,id",
             ]);
 
             $data->fill($validated);
-            $data->save();
-
-            $data->material()->item_code = $validated["item_code"];
-            $data->material()->save();
+            $data->material->item_code = $validated["item_code"];
+            $data->push();
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {

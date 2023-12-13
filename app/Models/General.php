@@ -15,7 +15,7 @@ class General extends Model
         'item_code',
         'quantity',
         'color_id',
-        'master_id'
+        'master_code'
     ];
 
     public function master()
