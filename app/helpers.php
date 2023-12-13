@@ -37,14 +37,14 @@ if (!function_exists('convert_array')) {
     function convert_array(array $data)
     {
         $result = [];
-        foreach ($data as $piece) {
-            $result[$piece["item_code"]] = [];
+        foreach ($data as $key => $piece) {
+            $result[$key] = [];
 
             if ($piece["quantity"] ?? false) {
-                $result[$piece["item_code"]]["quantity"] = $piece["quantity"];
+                $result[$key]["quantity"] = $piece["quantity"];
             }
-            if ($piece["bom_code"] ?? false) {
-                $result[$piece["item_code"]]["bom_code"] = $piece["bom_code"];
+            if ($piece["item_code"] ?? false) {
+                $result[$key]["item_code"] = $piece["item_code"];
             }
         }
         return $result;

@@ -23,6 +23,7 @@ class CategoryController extends Controller
             $category = handle_relations($relations, $this->possible_relations, $category);
         }
         return response()->json([
+            "message" => "Success",
             "data" => $category->get()
         ], Response::HTTP_OK);
     }
@@ -37,7 +38,8 @@ class CategoryController extends Controller
         ]);
         if ($validator->fails()) {
             return response()->json([
-                "message" => $validator->errors()
+                "message" => "Failed",
+                "error" => $validator->errors()
             ], Response::HTTP_BAD_REQUEST);
         }
         $validated = $validator->validated();
@@ -46,12 +48,13 @@ class CategoryController extends Controller
             $newValue = Category::create($validated);
         } catch (\Exception $e) {
             return response()->json([
-                "error" => $e
-            ], Response::HTTP_BAD_REQUEST);
+                "message" => "Failed",
+                "error" => $e,
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return response()->json([
-            "message" => "Data Berhasil dibuat",
+            "message" => "Success",
             "data" => $newValue,
         ], Response::HTTP_OK);
     }
@@ -69,8 +72,10 @@ class CategoryController extends Controller
             $category = handle_relations($relations, $this->possible_relations,  $category);
         }
 
-
-        return $category->findOrFail($id);
+        return response()->json([
+            "message" => "Success",
+            "data" => $category->findOrFail($id)
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -83,7 +88,8 @@ class CategoryController extends Controller
         ]);
         if ($validator->fails()) {
             return response()->json([
-                "message" => $validator->errors()
+                "message" => "Failed",
+                "error" => $validator->errors()
             ], Response::HTTP_BAD_REQUEST);
         }
         $validated = $validator->validated();
@@ -92,12 +98,13 @@ class CategoryController extends Controller
             $category->update($validated);
         } catch (\Exception $e) {
             return response()->json([
-                "error" => $e
-            ], Response::HTTP_BAD_REQUEST);
+                "message" => "Failed",
+                "error" => $e,
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return response()->json([
-            "message" => "Data Berhasil diupdate",
+            "message" => "Success",
             "data" => $category,
         ], Response::HTTP_OK);
     }
@@ -109,7 +116,7 @@ class CategoryController extends Controller
     {
         $category->delete();
         return response()->json([
-            "message" => "Data Berhasil didelete",
+            "message" => "Success",
         ], Response::HTTP_OK);
     }
 }
