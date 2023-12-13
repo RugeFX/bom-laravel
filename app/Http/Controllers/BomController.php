@@ -38,7 +38,6 @@ class BomController extends Controller
             'bom_code' => 'required|string',
             'item' => 'required|array',
             'item.*.item_code' => 'required|string',
-            'item.*.quantity' => 'required|integer',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -93,7 +92,6 @@ class BomController extends Controller
             'bom_code' => 'string',
             'item' => 'array',
             'item.*.item_code' => 'string',
-            'item.*.quantity' => 'integer',
         ]);
         if ($validator->fails()) {
             return response()->json([

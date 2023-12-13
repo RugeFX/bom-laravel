@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('bom_material', function (Blueprint $table) {
             $table->id();
-            $table->integer("quantity");
             $table->string("item_code");
             $table->foreignId("bom_id")->constrained('boms')->onDelete('cascade');
             $table->foreign("item_code")->references("item_code")->on('materials')->onDelete('cascade');
