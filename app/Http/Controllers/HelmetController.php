@@ -80,7 +80,7 @@ class HelmetController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = Helmet::query()->with(["material"])->find($id);
+        $data = Helmet::query()->with("material")->find($id);
 
         if (!$data) {
             return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);

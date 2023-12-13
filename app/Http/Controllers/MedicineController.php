@@ -77,7 +77,7 @@ class MedicineController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = Medicine::query()->find($id);
+        $data = Medicine::query()->with("material")->find($id);
 
         if (!$data) {
             return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
