@@ -24,6 +24,7 @@ class SizemasterController extends Controller
             $size = handle_relations($relations, $this->possible_relations, $size);
         }
         return response()->json([
+            "message" => "Success",
             "data" => $size->get()
         ], Response::HTTP_OK);
     }
@@ -53,7 +54,7 @@ class SizemasterController extends Controller
         }
 
         return response()->json([
-            "message" => "Data Berhasil dibuat",
+            "message" => "Success",
             "data" => $newValue,
         ], Response::HTTP_OK);
     }
@@ -70,9 +71,11 @@ class SizemasterController extends Controller
         if ($relations) {
             $size = handle_relations($relations, $this->possible_relations,  $size);
         }
-
-
-        return $size->findOrFail($id);
+        
+        return response()->json([
+            "message" => "Success",
+            "data" => $size->findOrFail($id)
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -100,7 +103,7 @@ class SizemasterController extends Controller
         }
 
         return response()->json([
-            "message" => "Data Berhasil diupdate",
+            "message" => "Success",
             "data" => $size,
         ], Response::HTTP_OK);
     }
@@ -112,7 +115,7 @@ class SizemasterController extends Controller
     {
         $size->delete();
         return response()->json([
-            "message" => "Data Berhasil didelete",
+            "message" => "Success",
         ], Response::HTTP_OK);
     }
 }
