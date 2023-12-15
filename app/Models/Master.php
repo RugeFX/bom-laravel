@@ -11,7 +11,7 @@ class Master extends Model
 
     protected $fillable = [
         'category_id',
-        'code'
+        'master_code'
     ];
 
     public function category()
