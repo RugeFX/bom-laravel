@@ -25,7 +25,7 @@ class MedicineController extends Controller
         if ($relations) {
             $data = handle_relations($relations, $this->possible_relations, $data);
         }
-        return response()->json(["message" => "Success", "data" => $data]);
+        return response()->json(["message" => "Success", "data" => $data->get()]);
     }
 
     /**
@@ -91,7 +91,9 @@ class MedicineController extends Controller
             ]);
 
             $data->fill($validated);
-            $data->material->item_code = $validated["item_code"];
+            if (array_key_exists("item_code", $validated)) {
+                $data->material->item_code = $validated["item_code"];
+            }
             $data->push();
 
             return response()->json(["message" => "Success", "data" => $data]);

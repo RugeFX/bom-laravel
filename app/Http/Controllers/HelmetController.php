@@ -96,7 +96,9 @@ class HelmetController extends Controller
             ]);
 
             $data->fill($validated);
-            $data->material->item_code = $validated["item_code"];
+            if (array_key_exists("item_code", $validated)) {
+                $data->material->item_code = $validated["item_code"];
+            }
             $data->push();
 
             return response()->json(["message" => "Success", "data" => $data]);
