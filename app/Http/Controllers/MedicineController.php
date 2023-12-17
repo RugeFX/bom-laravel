@@ -85,7 +85,7 @@ class MedicineController extends Controller
 
         try {
             $validated = $request->validate([
-                "item_code" => "string|unique:materials,item_code," . $request->input("item_code"),
+                "item_code" => ["string", \Illuminate\Validation\Rule::unique('materials', 'item_code')->ignore($data->item_code, "item_code")],
                 "name" => "string",
                 "quantity" => "integer",
             ]);
