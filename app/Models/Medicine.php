@@ -37,8 +37,7 @@ class Medicine extends Model
         );
 
         static::deleted(
-            fn (Medicine $model) =>
-            $model->material()->where("item_code", "=", $model->item_code)->delete()
+            fn (Medicine $model) => $model->material()->delete()
         );
     }
 }

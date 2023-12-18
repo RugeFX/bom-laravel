@@ -50,8 +50,7 @@ class Helmet extends Model
         );
 
         static::deleted(
-            fn (Helmet $model) =>
-            $model->material()->where("item_code", "=", $model->item_code)->delete()
+            fn (Helmet $model) => $model->material()->delete()
         );
     }
 }

@@ -25,7 +25,7 @@ class MedicineController extends Controller
         if ($relations) {
             $data = handle_relations($relations, $this->possible_relations, $data);
         }
-        return response()->json(["message" => "Success", "data" => $data]);
+        return response()->json(["message" => "Success", "data" => $data->get()]);
     }
 
     /**
@@ -35,11 +35,11 @@ class MedicineController extends Controller
     {
         try {
             $validated = $request->validate([
-                "item_code" => "required|string|unique:material_master,item_code",
+                "item_code" => "required|string|unique:materials,item_code",
                 "name" => "required|string",
                 "quantity" => "required|integer",
             ]);
-            $validated["master_id"] = 2;
+            $validated["master_code"] = "MSMDCN";
 
             $data = Medicine::query()->create($validated);
 
@@ -77,7 +77,7 @@ class MedicineController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = Medicine::query()->find($id);
+        $data = Medicine::query()->with("material")->find($id);
 
         if (!$data) {
             return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
@@ -85,12 +85,16 @@ class MedicineController extends Controller
 
         try {
             $validated = $request->validate([
-                "item_code" => "string|unique:material_master,item_code," . $request->input("item_code"),
+                "item_code" => ["string", \Illuminate\Validation\Rule::unique('materials', 'item_code')->ignore($data->item_code, "item_code")],
                 "name" => "string",
                 "quantity" => "integer",
             ]);
 
-            $data->update($validated);
+            $data->fill($validated);
+            if (array_key_exists("item_code", $validated)) {
+                $data->material->item_code = $validated["item_code"];
+            }
+            $data->push();
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {

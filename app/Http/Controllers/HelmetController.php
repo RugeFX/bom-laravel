@@ -36,13 +36,13 @@ class HelmetController extends Controller
     {
         try {
             $validated = $request->validate([
-                "item_code" => "required|string|unique:material_master,item_code",
+                "item_code" => "required|string|unique:materials,item_code",
                 "name" => "required|string",
                 "quantity" => "required|integer",
                 "color_id" => "required|integer|exists:colors,id",
                 "size_id" => "required|integer|exists:sizes,id",
-                "master_code" => "required|integer|exists:masters,master_code",
             ]);
+            $validated["master_code"] = "MSHLMT";
 
             $data = Helmet::query()->create($validated);
 
@@ -80,7 +80,7 @@ class HelmetController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = Helmet::query()->find($id);
+        $data = Helmet::query()->with("material")->find($id);
 
         if (!$data) {
             return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
@@ -88,14 +88,18 @@ class HelmetController extends Controller
 
         try {
             $validated = $request->validate([
-                "item_code" => "string|unique:material_master,item_code," . $request->input("item_code"),
+                "item_code" => ["string", \Illuminate\Validation\Rule::unique('materials', 'item_code')->ignore($data->item_code, "item_code")],
                 "name" => "string",
                 "quantity" => "integer",
                 "color_id" => "integer|exists:colors,id",
                 "size_id" => "integer|exists:sizes,id",
             ]);
 
-            $data->update($validated);
+            $data->fill($validated);
+            if (array_key_exists("item_code", $validated)) {
+                $data->material->item_code = $validated["item_code"];
+            }
+            $data->push();
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {

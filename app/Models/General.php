@@ -15,7 +15,7 @@ class General extends Model
         'item_code',
         'quantity',
         'color_id',
-        'master_id'
+        'master_code'
     ];
 
     public function master()
@@ -43,8 +43,7 @@ class General extends Model
         );
 
         static::deleted(
-            fn (General $model) =>
-            $model->material()->where("item_code", "=", $model->item_code)->delete()
+            fn (General $model) => $model->material()->delete()
         );
     }
 }

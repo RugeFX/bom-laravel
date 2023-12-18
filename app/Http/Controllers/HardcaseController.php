@@ -39,13 +39,13 @@ class HardcaseController extends Controller
     {
         try {
             $validated = $request->validate([
-                "item_code" => "required|string|unique:material_master,item_code",
+                "item_code" => "required|string|unique:materials,item_code",
                 "name" => "required|string",
                 "quantity" => "required|integer",
                 "color_id" => "required|integer|exists:colors,id",
                 "size_id" => "required|integer|exists:sizes,id",
             ]);
-            $validated["master_id"] = 4;
+            $validated["master_code"] = "MSHRCS";
 
             $data = Hardcase::query()->create($validated);
 
@@ -83,7 +83,7 @@ class HardcaseController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = Hardcase::query()->find($id);
+        $data = Hardcase::query()->with("material")->find($id);
 
         if (!$data) {
             return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
@@ -91,14 +91,18 @@ class HardcaseController extends Controller
 
         try {
             $validated = $request->validate([
-                "item_code" => "string|unique:material_master,item_code," . $request->input("item_code"),
+                "item_code" => ["string", \Illuminate\Validation\Rule::unique('materials', 'item_code')->ignore($data->item_code, "item_code")],
                 "name" => "string",
                 "quantity" => "integer",
                 "color_id" => "integer|exists:colors,id",
                 "size_id" => "integer|exists:sizes,id",
             ]);
 
-            $data->update($validated);
+            $data->fill($validated);
+            if (array_key_exists("item_code", $validated)) {
+                $data->material->item_code = $validated["item_code"];
+            }
+            $data->push();
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {

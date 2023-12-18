@@ -37,6 +37,7 @@ Route::apiResource('boms', BomController::class);
 Route::apiResource('helmetItems', helmetItemController::class);
 
 Route::get("materials", fn () =>  Material::all());
+Route::delete("materials/{id}", fn (string $id) =>  Material::query()->find($id)->delete());
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
