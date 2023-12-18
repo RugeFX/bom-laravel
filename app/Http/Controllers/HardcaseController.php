@@ -26,7 +26,10 @@ class HardcaseController extends Controller
             $data = handle_relations($relations, $this->possible_relations, $data);
         }
 
-        return response()->json(["message" => "Success", "data" => $data->get()]);
+        return response()->json([
+            "message" => "Success",
+            "data" => $data->get()
+        ]);
     }
 
     /**

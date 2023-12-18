@@ -2,24 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bom;
 use App\Models\Helmet;
+use App\Models\HelmetItem;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
-class HelmetController extends Controller
+class helmetItemController extends Controller
 {
-    /**
-     * The controller main model's array of possible relations.
-     */
-    public $possible_relations = ["size", "color", "master", "material"];
-
     /**
      * Display a listing of the resource.
      */
+    public $possible_relations = ["bom.material.helmet", "reservation","material.helmet"];
     public function index(Request $request)
     {
-        $data = new Helmet;
+        $data = new HelmetItem();
 
         $relations = $request->input("relations");
         if ($relations) {
@@ -30,21 +28,38 @@ class HelmetController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         try {
             $validated = $request->validate([
-                "item_code" => "required|string|unique:material_master,item_code",
+                "bom_code" => "required|string|exists:boms,bom_code",
                 "name" => "required|string",
-                "quantity" => "required|integer",
-                "color_id" => "required|integer|exists:colors,id",
-                "size_id" => "required|integer|exists:sizes,id",
-                "master_code" => "required|integer|exists:masters,master_code",
+                "code" => "required|string",
             ]);
-
-            $data = Helmet::query()->create($validated);
+            
+            $bom = Bom::with('material.helmet')->firstWhere('bom_code', $validated['bom_code']);
+            $stock = $bom->material;
+            $helmetStock = $stock->map(function ($material) {
+                $helmet = $material->helmet;
+                return $helmet->quantity;
+            });
+            $helmetCount = HelmetItem::count();
+            foreach($helmetStock as $h){
+                if($h<=$helmetCount){
+                    return response()->json(["message" => "Failed", "data" => $helmetCount]);
+                }
+            }
+            $data = HelmetItem::query()->create($validated);
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {
@@ -60,7 +75,7 @@ class HelmetController extends Controller
      */
     public function show(Request $request, string $id)
     {
-        $data = new Helmet;
+        $data = new HelmetItem();
 
         $relations = $request->input("relations");
         if ($relations) {
@@ -76,28 +91,28 @@ class HelmetController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, HelmetItem $helmetItem)
     {
-        $data = Helmet::query()->find($id);
-
-        if (!$data) {
-            return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
-        }
-
         try {
             $validated = $request->validate([
-                "item_code" => "string|unique:material_master,item_code," . $request->input("item_code"),
+                "bom_code" => "string|exist:boms,bom_code",
                 "name" => "string",
-                "quantity" => "integer",
-                "color_id" => "integer|exists:colors,id",
-                "size_id" => "integer|exists:sizes,id",
+                "code" => "string",
             ]);
 
-            $data->update($validated);
+            $helmetItem->update($validated);
 
-            return response()->json(["message" => "Success", "data" => $data]);
+            return response()->json(["message" => "Success", "data" => $helmetItem]);
         } catch (\Exception $ex) {
             if ($ex instanceof ValidationException) {
                 return response()->json(["message" => "Failed", "error" => $ex->errors()], Response::HTTP_BAD_REQUEST);
@@ -109,15 +124,9 @@ class HelmetController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(HelmetItem $helmetItem)
     {
-        $data = Helmet::query()->find($id);
-
-        if (!$data) {
-            return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
-        }
-
-        $data->delete();
+        $helmetItem->delete();
 
         return response()->json(["message" => "Success"]);
     }

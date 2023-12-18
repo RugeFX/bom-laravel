@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bom_material', function (Blueprint $table) {
-            $table->string('item_code');
-            $table->foreign('item_code')->references('item_code')->on('materials')->onDelete('cascade');
-            $table->foreignId('bom_id')->constrained('boms')->onDelete('cascade');
+        Schema::create('reservations_fakItem', function (Blueprint $table) {
+            $table->id();
+            $table->string('fak_code');
+            $table->foreign('fak_code')->references("code")->on('fakItems')->onDelete('cascade');
+            $table->foreignId('reservation_id')->constrained('reservations')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bom_material_master');
+        Schema::dropIfExists('reservations_fakItem');
     }
 };

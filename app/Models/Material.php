@@ -13,10 +13,12 @@ class Material extends Model
     protected $fillable = [
         'item_code'
     ];
+    protected $primaryKey = 'item_code'; 
+    public $incrementing = false;
 
     public function bom()
     {
-        return $this->belongsToMany(Bom::class,'bom_material', 'item_code', 'item_code')->withPivot('item_code');
+        return $this->belongsToMany(Bom::class, 'bom_material', 'item_code', 'bom_id')->withPivot('item_code');
     }
 
     public function helmet()

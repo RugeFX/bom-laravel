@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bom_material', function (Blueprint $table) {
-            $table->string('item_code');
-            $table->foreign('item_code')->references('item_code')->on('materials')->onDelete('cascade');
-            $table->foreignId('bom_id')->constrained('boms')->onDelete('cascade');
+        Schema::create('plans', function (Blueprint $table) {
+            $table->id();
+            $table->string('plan_code')->unique();
+            $table->string('name');
+            $table->string('location');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bom_material_master');
+        Schema::dropIfExists('plans');
     }
 };
