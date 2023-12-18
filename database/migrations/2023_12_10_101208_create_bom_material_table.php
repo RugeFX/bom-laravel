@@ -13,11 +13,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('bom_material', function (Blueprint $table) {
-            $table->id();
-            $table->integer("quantity");
-            $table->string("item_code");
-            $table->foreignId("bom_id")->constrained('boms')->onDelete('cascade');
-            $table->foreign("item_code")->references("item_code")->on('materials')->onDelete('cascade');
+            $table->string('item_code');
+            $table->foreign('item_code')->references('item_code')->on('materials')->onDelete('cascade');
+            $table->foreignId('bom_id')->constrained('boms')->onDelete('cascade');
             $table->timestamps();
         });
     }

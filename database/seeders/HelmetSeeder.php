@@ -18,7 +18,7 @@ class HelmetSeeder extends Seeder
                 "master_code" => "MSHLMT",
                 "item_code" => "HLMADLT",
                 "name" => "Adult",
-                "quantity" => 26,
+                "quantity" => 1,
                 "size_id" => 2,
                 "created_at" => \Carbon\Carbon::now(), 
                 "updated_at" => \Carbon\Carbon::now()

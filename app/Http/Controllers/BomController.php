@@ -12,7 +12,7 @@ class BomController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public $possible_relations = ["material"];
+    public $possible_relations = ["material.helmet","material.hardcase","material.general","material.medicine"];
 
     public function index(Request $request)
     {
@@ -38,7 +38,6 @@ class BomController extends Controller
             'bom_code' => 'required|string',
             'item' => 'required|array',
             'item.*.item_code' => 'required|string',
-            'item.*.quantity' => 'required|integer',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -93,7 +92,6 @@ class BomController extends Controller
             'bom_code' => 'string',
             'item' => 'array',
             'item.*.item_code' => 'string',
-            'item.*.quantity' => 'integer',
         ]);
         if ($validator->fails()) {
             return response()->json([

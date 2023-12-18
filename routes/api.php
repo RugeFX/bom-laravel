@@ -6,6 +6,7 @@ use App\Http\Controllers\ColormasterController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\HardcaseController;
 use App\Http\Controllers\HelmetController;
+use App\Http\Controllers\helmetItemController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\SizemasterController;
@@ -33,6 +34,7 @@ Route::apiResource("hardcases", HardcaseController::class);
 Route::apiResource("helmets", HelmetController::class);
 Route::apiResource("medicines", MedicineController::class);
 Route::apiResource('boms', BomController::class);
+Route::apiResource('helmetItems', helmetItemController::class);
 
 Route::get("materials", fn () =>  Material::all());
 Route::delete("materials/{id}", fn (string $id) =>  Material::query()->find($id)->delete());
