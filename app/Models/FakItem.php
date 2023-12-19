@@ -12,11 +12,16 @@ class FakItem extends Model
         'code',
         'bom_code',
         'name',
+        'plan_code'
     ];
+    protected $table = "fakItems";
     public function bom(){
         return $this->belongsTo(Bom::class,'bom_code','bom_code');
     }
     public function reservation(){
         return $this->belongsToMany(Helmet::class,'reservations_fakItem','fak_code','code')->withPivot('fak_code');
+    }
+    public function plan(){
+        return $this->belongsTo(Plan::class,'plan_code','plan_code');
     }
 }

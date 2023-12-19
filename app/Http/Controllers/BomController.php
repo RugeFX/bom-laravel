@@ -37,7 +37,7 @@ class BomController extends Controller
         $validator = Validator::make($request->all(), [
             'bom_code' => 'required|string',
             'item' => 'required|array',
-            'item.*.item_code' => 'required|string',
+            'item.*.item_code' => 'required|string|exists:materials,item_code',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -91,7 +91,7 @@ class BomController extends Controller
         $validator = Validator::make($request->all(), [
             'bom_code' => 'string',
             'item' => 'array',
-            'item.*.item_code' => 'string',
+            'item.*.item_code' => 'string|exists:materials,item_code',
         ]);
         if ($validator->fails()) {
             return response()->json([

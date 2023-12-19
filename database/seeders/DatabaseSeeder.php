@@ -23,7 +23,9 @@ class DatabaseSeeder extends Seeder
             HardcaseSeeder::class,
             HelmetSeeder::class,
             MedicineSeeder::class,
-            MaterialSeeder::class
+            MaterialSeeder::class,
+            BomSeeder::class,
+            PlanSeeder::class,
         ]);
     }
 }

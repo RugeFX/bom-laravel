@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('plan_code')->unique();
             $table->string('name');
-            $table->string('location');
+            $table->string('address');
             $table->timestamps();
         });
     }
