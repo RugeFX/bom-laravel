@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bom;
-use App\Models\Helmet;
-use App\Models\HelmetItem;
+use App\Models\Plan;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
-class helmetItemController extends Controller
+class PlanController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public $possible_relations = ["bom.material.helmet", "reservation"];
+    public $possible_relations = ["helmetItems.bom.material.helmet", "fakItems.bom.material.medicine","return","pickup"];
     public function index(Request $request)
     {
-        $data = new HelmetItem();
+        $data = new Plan();
 
         $relations = $request->input("relations");
         if ($relations) {
             $data = handle_relations($relations, $this->possible_relations, $data);
         }
 
-        return response()->json(["message" => "Success", "data" => $data->get()]);
+        return response()->json([
+            "message" => "Success",
+            "data" => $data->get()
+        ]);
     }
 
     /**
@@ -42,25 +43,11 @@ class helmetItemController extends Controller
     {
         try {
             $validated = $request->validate([
-                "bom_code" => "required|string|exists:boms,bom_code",
+                "plan_code" => "required|string|unique:plans,plan_code",
                 "name" => "required|string",
-                "code" => "required|string",
-                "plan_code"=>"required|string|exists:plans,plan_code"
+                "address" => "required|string",
             ]);
-            
-            $bom = Bom::with('material.helmet')->firstWhere('bom_code', $validated['bom_code']);
-            $stock = $bom->material;
-            $helmetStock = $stock->map(function ($material) {
-                $helmet = $material->helmet;
-                return $helmet->quantity;
-            });
-            $helmetCount = HelmetItem::count();
-            foreach($helmetStock as $h){
-                if($h<=$helmetCount){
-                    return response()->json(["message" => "Failed", "data" => $helmetCount]);
-                }
-            }
-            $data = HelmetItem::query()->create($validated);
+            $data = Plan::query()->create($validated);
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {
@@ -76,7 +63,7 @@ class helmetItemController extends Controller
      */
     public function show(Request $request, string $id)
     {
-        $data = new HelmetItem();
+        $data = new Plan;
 
         $relations = $request->input("relations");
         if ($relations) {
@@ -102,19 +89,18 @@ class helmetItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, HelmetItem $helmetItem)
+    public function update(Request $request, Plan $plan)
     {
         try {
             $validated = $request->validate([
-                "bom_code" => "string|exists:boms,bom_code",
+                "plan_code"=> ["string", \Illuminate\Validation\Rule::unique('plans', 'plan_code')->ignore($plan->item_code, "plan_code")],
                 "name" => "string",
-                "code" => "string",
-                "plan_code"=>"string|exists:plans,plan_code"
+                "address" => "string",
             ]);
 
-            $helmetItem->update($validated);
+            $plan->update($validated);
 
-            return response()->json(["message" => "Success", "data" => $helmetItem]);
+            return response()->json(["message" => "Success", "data" => $plan]);
         } catch (\Exception $ex) {
             if ($ex instanceof ValidationException) {
                 return response()->json(["message" => "Failed", "error" => $ex->errors()], Response::HTTP_BAD_REQUEST);
@@ -126,10 +112,9 @@ class helmetItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HelmetItem $helmetItem)
+    public function destroy(Plan $plan)
     {
-        $helmetItem->delete();
-
+        $plan->delete();
         return response()->json(["message" => "Success"]);
     }
 }

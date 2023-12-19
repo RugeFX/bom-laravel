@@ -32,6 +32,18 @@ class ColorSeeder extends Seeder
                 "updated_at" => \Carbon\Carbon::now()
                 
             ],
+            [
+                "name" => "Red",
+                "created_at" => \Carbon\Carbon::now(), 
+                "updated_at" => \Carbon\Carbon::now()
+                
+            ],
+            [
+                "name" => "Green",
+                "created_at" => \Carbon\Carbon::now(), 
+                "updated_at" => \Carbon\Carbon::now()
+                
+            ],
         ]);
     }
 }

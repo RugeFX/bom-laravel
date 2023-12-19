@@ -14,7 +14,7 @@ class General extends Model
         'name',
         'item_code',
         'quantity',
-        'color_id',
+        // 'color_id',
         'master_code'
     ];
 
@@ -23,10 +23,10 @@ class General extends Model
         return $this->belongsTo(Master::class, "master_code", "master_code");
     }
 
-    public function color()
-    {
-        return $this->belongsTo(Color::class);
-    }
+    // public function color()
+    // {
+    //     return $this->belongsTo(Color::class);
+    // }
 
     public function material()
     {

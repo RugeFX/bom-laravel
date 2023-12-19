@@ -39,7 +39,6 @@ class HelmetController extends Controller
                 "item_code" => "required|string|unique:materials,item_code",
                 "name" => "required|string",
                 "quantity" => "required|integer",
-                "color_id" => "required|integer|exists:colors,id",
                 "size_id" => "required|integer|exists:sizes,id",
             ]);
             $validated["master_code"] = "MSHLMT";
@@ -91,7 +90,6 @@ class HelmetController extends Controller
                 "item_code" => ["string", \Illuminate\Validation\Rule::unique('materials', 'item_code')->ignore($data->item_code, "item_code")],
                 "name" => "string",
                 "quantity" => "integer",
-                "color_id" => "integer|exists:colors,id",
                 "size_id" => "integer|exists:sizes,id",
             ]);
 

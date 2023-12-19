@@ -18,7 +18,6 @@ return new class extends Migration
             $table->integer("quantity");
             $table->string("master_code");
             $table->foreign("master_code")->references("master_code")->on('masters')->onDelete("cascade");
-            $table->foreignId("color_id")->constrained('colors')->onDelete("cascade");
             $table->timestamps();
         });
     }

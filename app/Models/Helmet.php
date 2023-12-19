@@ -16,8 +16,8 @@ class Helmet extends Model
         'item_code',
         'quantity',
         'size_id',
-        'color_id',
-        'master_id'
+        // 'color_id',
+        'master_code'
     ];
 
     public function master()
@@ -30,10 +30,10 @@ class Helmet extends Model
         return $this->belongsTo(Size::class);
     }
 
-    public function color()
-    {
-        return $this->belongsTo(Color::class);
-    }
+    // public function color()
+    // {
+    //     return $this->belongsTo(Color::class);
+    // }
 
     public function material()
     {

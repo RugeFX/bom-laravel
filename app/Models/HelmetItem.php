@@ -13,6 +13,7 @@ class HelmetItem extends Model
         'code',
         'bom_code',
         'name',
+        'plan_code',
     ];
 
     public function bom(){
@@ -20,5 +21,8 @@ class HelmetItem extends Model
     }
     public function reservation(){
         return $this->belongsToMany(Helmet::class,'reservations_helmetItem','helmet_code','code')->withPivot('helmet_code');
+    }
+    public function plan(){
+        return $this->belongsTo(Plan::class,'plan_code','plan_code');
     }
 }

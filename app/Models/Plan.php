@@ -11,8 +11,14 @@ class Plan extends Model
     protected $fillable = [
         'plan_code',
         'name',
-        'location'
+        'address'
     ];
+    public function helmetItems(){
+        return $this->hasMany(HelmetItem::class,'plan_code','plan_code');
+    }
+    public function fakItems(){
+        return $this->hasMany(FakItem::class,'plan_code','plan_code');
+    }
     public function pickup(){
         return $this->hasMany(Reservation::class,'pickupPlan_code','plan_code');
     }

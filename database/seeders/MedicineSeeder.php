@@ -16,32 +16,8 @@ class MedicineSeeder extends Seeder
         DB::table("medicines_master")->insert([
             [
                 "master_code" => "MSMDCN",
-                "item_code" => "MDCBNDG",
-                "name" => "Bandage",
-                "quantity" => 50,
-                "created_at" => \Carbon\Carbon::now(), 
-                "updated_at" => \Carbon\Carbon::now()
-            ],
-            [
-                "master_code" => "MSMDCN",
-                "item_code" => "MDCSCSR",
-                "name" => "Scissors",
-                "quantity" => 50,
-                "created_at" => \Carbon\Carbon::now(), 
-                "updated_at" => \Carbon\Carbon::now()
-            ],
-            [
-                "master_code" => "MSMDCN",
-                "item_code" => "MDCTHRM",
-                "name" => "Thermometer",
-                "quantity" => 50,
-                "created_at" => \Carbon\Carbon::now(), 
-                "updated_at" => \Carbon\Carbon::now()
-            ],
-            [
-                "master_code" => "MSMDCN",
-                "item_code" => "MDCTWZR",
-                "name" => "Tweezer",
+                "item_code" => "FAK-NEW",
+                "name" => "First Aid Kit",
                 "quantity" => 50,
                 "created_at" => \Carbon\Carbon::now(), 
                 "updated_at" => \Carbon\Carbon::now()

@@ -13,7 +13,7 @@ class Medicine extends Model
     protected $fillable = [
         'name',
         'item_code',
-        'master_id',
+        'master_code',
         'quantity'
     ];
 
