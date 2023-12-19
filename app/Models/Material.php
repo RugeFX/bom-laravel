@@ -14,6 +14,9 @@ class Material extends Model
         'item_code'
     ];
     protected $primaryKey = 'item_code'; 
+
+    public $keyType = 'string';
+
     public $incrementing = false;
 
     public function bom()

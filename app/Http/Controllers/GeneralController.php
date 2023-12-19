@@ -12,7 +12,7 @@ class GeneralController extends Controller
     /**
      * The controller main model's array of possible relations.
      */
-    public $possible_relations = ["color", "master", "material"];
+    public $possible_relations = ["master", "material"];
 
     /**
      * Display a listing of the resource.

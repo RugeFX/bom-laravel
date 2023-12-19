@@ -12,7 +12,7 @@ class HelmetController extends Controller
     /**
      * The controller main model's array of possible relations.
      */
-    public $possible_relations = ["size", "color", "master", "material"];
+    public $possible_relations = ["size", "master", "material"];
 
     /**
      * Display a listing of the resource.

@@ -10,9 +10,11 @@ use App\Http\Controllers\HelmetController;
 use App\Http\Controllers\helmetItemController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\motorItemController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SizemasterController;
 use App\Models\Material;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +41,9 @@ Route::apiResource('boms', BomController::class);
 Route::apiResource('helmetItems', helmetItemController::class);
 Route::apiResource('fakItems', fakItemController::class);
 Route::apiResource('plans', PlanController::class);
+Route::apiResource('motorItems', motorItemController::class);
+// Route::apiResource('reservation', Reservation::class);
+
 
 Route::get("materials", fn () =>  Material::all());
 Route::delete("materials/{id}", fn (string $id) =>  Material::query()->find($id)->delete());

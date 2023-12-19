@@ -17,15 +17,23 @@ class Reservation extends Model
         'motor_code'
     ];
 
-    public function helmet(){
+    public function helmetItems(){
         return $this->belongsToMany(HelmetItem::class,'reservations_helmetItem','reservation_id','id')->withPivot('helmet_code');
     }
 
-    public function fak(){
+    public function fakItems(){
         return $this->belongsToMany(FakItem::class,'reservations_fakItem','reservation_id','id')->withPivot('fak_code');
     }
 
-    public function motor(){
+    public function motorItems(){
         return $this->belongsToMany(Helmet::class,'reservations_motorItem','reservation_id','id')->withPivot('motor_code');
+    }
+
+    public function pickup(){
+        return $this->belongsTo(Plan::class,'plan_code','pickupPlan_code');
+    }
+
+    public function return(){
+        return $this->belongsTo(Plan::class,'plan_code','returnPlan_code');
     }
 }

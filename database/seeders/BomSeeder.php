@@ -29,7 +29,7 @@ class BomSeeder extends Seeder
         $bom3->material()->attach($material1);
 
         $bom4 = Bom::create(["bom_code" => "BKG-HLM-SIZE-XL"]);
-        $material1 = Material::where('item_code', 'BKG-HLM-SIZE-XL')->first();
+        $material1 = Material::where('item_code', 'HLM-SIZE-XL')->first();
         $bom4->material()->attach($material1);
 
         $bom5 = Bom::create(["bom_code" => "BKG-FAK-NEW"]);

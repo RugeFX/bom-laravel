@@ -13,7 +13,7 @@ class fakItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public $possible_relations = ["bom.material.medicine", "reservation"];
+    public $possible_relations = ["bom.material.medicine", "reservation","plan"];
 
     public function index(Request $request)
     {
