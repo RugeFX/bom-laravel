@@ -19,6 +19,10 @@ return new class extends Migration
             $table->foreign('bom_code')->references("bom_code")->on('boms')->onDelete('cascade');
             $table->string('plan_code');
             $table->foreign('plan_code')->references("plan_code")->on('plans')->onDelete('cascade');
+            $table->string('hardcase_code')->nullable()->unique();
+            $table->foreign('hardcase_code')->references("code")->on('hardcaseItems')->onDelete('cascade');
+            $table->string('status');
+            $table->string('information')->nullable();
             $table->timestamps();
         });
     }

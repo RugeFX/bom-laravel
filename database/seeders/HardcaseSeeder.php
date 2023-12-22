@@ -122,6 +122,114 @@ class HardcaseSeeder extends Seeder
                 "created_at" => \Carbon\Carbon::now(), 
                 "updated_at" => \Carbon\Carbon::now()
             ],
+            [
+                "master_code" => "MSHRCS",
+                "item_code" => "MNRCK-SIZE-26",
+                "name" => "Monorack Size 26",
+                "quantity" => 18,
+                "size_id" => 6,
+                "created_at" => \Carbon\Carbon::now(), 
+                "updated_at" => \Carbon\Carbon::now()
+            ],
+            [
+                "master_code" => "MSHRCS",
+                "item_code" => "MNRCK-SIZE-30",
+                "name" => "Monorack Size 30",
+                "quantity" => 33,
+                "size_id" => 7,
+                "created_at" => \Carbon\Carbon::now(), 
+                "updated_at" => \Carbon\Carbon::now()
+            ],
+            [
+                "master_code" => "MSHRCS",
+                "item_code" => "MNRCK-SIZE-33",
+                "name" => "Monorack Size 33",
+                "quantity" => 33,
+                "size_id" => 8,
+                "created_at" => \Carbon\Carbon::now(), 
+                "updated_at" => \Carbon\Carbon::now()
+            ],
+            [
+                "master_code" => "MSHRCS",
+                "item_code" => "MNRCK-SIZE-36",
+                "name" => "Monorack Size 36",
+                "quantity" => 33,
+                "size_id" => 9,
+                "created_at" => \Carbon\Carbon::now(), 
+                "updated_at" => \Carbon\Carbon::now()
+            ],
+            [
+                "master_code" => "MSHRCS",
+                "item_code" => "MNRCK-SIZE-38",
+                "name" => "Monorack Size 38",
+                "quantity" => 33,
+                "size_id" => 10,
+                "created_at" => \Carbon\Carbon::now(), 
+                "updated_at" => \Carbon\Carbon::now()
+            ],
+            [
+                "master_code" => "MSHRCS",
+                "item_code" => "MNRCK-SIZE-39",
+                "name" => "Monorack Size 39",
+                "quantity" => 33,
+                "size_id" => 11,
+                "created_at" => \Carbon\Carbon::now(), 
+                "updated_at" => \Carbon\Carbon::now()
+            ],
+            [
+                "master_code" => "MSHRCS",
+                "item_code" => "MNRCK-SIZE-40",
+                "name" => "Monorack Size 40",
+                "quantity" => 33,
+                "size_id" => 12,
+                "created_at" => \Carbon\Carbon::now(), 
+                "updated_at" => \Carbon\Carbon::now()
+            ],
+            [
+                "master_code" => "MSHRCS",
+                "item_code" => "MNRCK-SIZE-41",
+                "name" => "Monorack Size 41",
+                "quantity" => 33,
+                "size_id" => 13,
+                "created_at" => \Carbon\Carbon::now(), 
+                "updated_at" => \Carbon\Carbon::now()
+            ],
+            [
+                "master_code" => "MSHRCS",
+                "item_code" => "MNRCK-SIZE-42",
+                "name" => "Monorack Size 42",
+                "quantity" => 33,
+                "size_id" => 14,
+                "created_at" => \Carbon\Carbon::now(), 
+                "updated_at" => \Carbon\Carbon::now()
+            ],
+            [
+                "master_code" => "MSHRCS",
+                "item_code" => "MNRCK-SIZE-43",
+                "name" => "Monorack Size 43",
+                "quantity" => 33,
+                "size_id" => 15,
+                "created_at" => \Carbon\Carbon::now(), 
+                "updated_at" => \Carbon\Carbon::now()
+            ],
+            [
+                "master_code" => "MSHRCS",
+                "item_code" => "MNRCK-SIZE-44",
+                "name" => "Monorack Size 44",
+                "quantity" => 33,
+                "size_id" => 16,
+                "created_at" => \Carbon\Carbon::now(), 
+                "updated_at" => \Carbon\Carbon::now()
+            ],
+            [
+                "master_code" => "MSHRCS",
+                "item_code" => "MNRCK-SIZE-45",
+                "name" => "Monorack Size 45",
+                "quantity" => 33,
+                "size_id" => 15,
+                "created_at" => \Carbon\Carbon::now(), 
+                "updated_at" => \Carbon\Carbon::now()
+            ],
         ]);     
     }
 }

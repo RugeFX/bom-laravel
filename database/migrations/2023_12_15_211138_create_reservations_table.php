@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreign('pickupPlan_code')->references("plan_code")->on('plans')->onDelete('cascade');
             $table->string('returnPlan_code')->nullable();
             $table->foreign('returnPlan_code')->references("plan_code")->on('plans')->onDelete('cascade');
+            $table->string('Status');
+            $table->string('information')->nullable();
             $table->timestamps();
         });
     }

@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('helmetItems', function (Blueprint $table) {
-            $table->id();
-            $table->string('code')->unique();
+        Schema::create('generalItems', function (Blueprint $table) {
+            $table->string("code")->primary();
             $table->string('name');
             $table->string('bom_code');
             $table->foreign('bom_code')->references("bom_code")->on('boms')->onDelete('cascade');
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('helmet_items');
+        Schema::dropIfExists('general_item');
     }
 };

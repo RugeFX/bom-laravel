@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Helmet;
+use App\Models\Motor;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
-class HelmetController extends Controller
+class MotorController extends Controller
 {
     /**
-     * The controller main model's array of possible relations.
+     * Display a listing of the resource.
      */
-    public $possible_relations = ["size", "master", "material"];
+    public $possible_relations = ["master", "material"];
 
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $data = new Helmet;
+        $data = new Motor();
 
         $relations = $request->input("relations");
         if ($relations) {
@@ -39,11 +39,10 @@ class HelmetController extends Controller
                 "item_code" => "required|string|unique:materials,item_code",
                 "name" => "required|string",
                 "quantity" => "required|integer",
-                "size_id" => "required|integer|exists:sizes,id",
             ]);
-            $validated["master_code"] = "MSHLMT";
+            $validated["master_code"] = "MSMTR";
 
-            $data = Helmet::query()->create($validated);
+            $data = Motor::query()->create($validated);
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {
@@ -59,7 +58,7 @@ class HelmetController extends Controller
      */
     public function show(Request $request, string $id)
     {
-        $data = new Helmet;
+        $data = new Motor();
 
         $relations = $request->input("relations");
         if ($relations) {
@@ -79,7 +78,7 @@ class HelmetController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = Helmet::query()->with("material")->find($id);
+        $data = Motor::query()->with(["material"])->find($id);
 
         if (!$data) {
             return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
@@ -90,7 +89,6 @@ class HelmetController extends Controller
                 "item_code" => ["string", \Illuminate\Validation\Rule::unique('materials', 'item_code')->ignore($data->item_code, "item_code")],
                 "name" => "string",
                 "quantity" => "integer",
-                "size_id" => "integer|exists:sizes,id",
             ]);
 
             $data->fill($validated);
@@ -113,7 +111,7 @@ class HelmetController extends Controller
      */
     public function destroy(string $id)
     {
-        $data = Helmet::query()->find($id);
+        $data = Motor::query()->find($id);
 
         if (!$data) {
             return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
