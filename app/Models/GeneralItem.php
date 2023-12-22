@@ -5,9 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FakItem extends Model
+class GeneralItem extends Model
 {
     use HasFactory;
+    protected $table = "generalItems";
+    protected $primaryKey = 'code'; 
+
+    public $keyType = 'string';
+
+    public $incrementing = false;
     protected $fillable = [
         'code',
         'bom_code',
@@ -16,17 +22,15 @@ class FakItem extends Model
         'status',
         'information',
     ];
-    protected $primaryKey = 'code'; 
-    public $keyType = 'string';
-    public $incrementing = false;
-    protected $table = "fakItems";
+
     public function bom(){
         return $this->belongsTo(Bom::class,'bom_code','bom_code');
     }
-    public function reservation(){
-        return $this->belongsToMany(Helmet::class,'reservations_fakItem','fak_code','code')->withPivot('fak_code');
+    public function motorItems(){
+        return $this->belongsToMany(MotorItem::class,'motorItem_generalItem','general_code','motorItem_id');
     }
     public function plan(){
         return $this->belongsTo(Plan::class,'plan_code','plan_code');
     }
+
 }

@@ -45,7 +45,9 @@ class helmetItemController extends Controller
                 "bom_code" => "required|string|exists:boms,bom_code",
                 "name" => "required|string",
                 "code" => "required|string",
-                "plan_code"=>"required|string|exists:plans,plan_code"
+                "plan_code"=>"required|string|exists:plans,plan_code",
+                'status'=>"required|string",
+                'information'=>"string",
             ]);
             
             $bom = Bom::with('material.helmet')->firstWhere('bom_code', $validated['bom_code']);
@@ -109,7 +111,9 @@ class helmetItemController extends Controller
                 "bom_code" => "string|exists:boms,bom_code",
                 "name" => "string",
                 "code" => "string",
-                "plan_code"=>"string|exists:plans,plan_code"
+                "plan_code"=>"string|exists:plans,plan_code",
+                'status'=>"string",
+                'information'=>"string",
             ]);
 
             $helmetItem->update($validated);

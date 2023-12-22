@@ -27,7 +27,7 @@ class MasterSeeder extends Seeder
                 "updated_at" => \Carbon\Carbon::now(),
             ],
             [
-                "master_code" => "MSGNRL",
+                "master_code" => "MSMTR",
                 "category_id" => 1,
                 "created_at" =>  \Carbon\Carbon::now(), 
                 "updated_at" => \Carbon\Carbon::now(),
@@ -35,6 +35,12 @@ class MasterSeeder extends Seeder
             [
                 "master_code" => "MSHRCS",
                 "category_id" => 3,
+                "created_at" =>  \Carbon\Carbon::now(), 
+                "updated_at" => \Carbon\Carbon::now(),
+            ],
+            [
+                "master_code" => "MSGNRL",
+                "category_id" => 1,
                 "created_at" =>  \Carbon\Carbon::now(), 
                 "updated_at" => \Carbon\Carbon::now(),
             ],

@@ -39,8 +39,34 @@ class Material extends Model
         return $this->hasOne(General::class, 'item_code', 'item_code');
     }
 
+    public function motor()
+    {
+        return $this->hasOne(Motor::class, 'item_code', 'item_code');
+    }
+
     public function hardcase()
     {
         return $this->hasOne(Hardcase::class, 'item_code', 'item_code');
+    }
+
+    public static function booted(): void
+    {
+        static::deleting(function (Material $model) {
+            $relations = ['bom', 'helmet', 'medicine', 'general', 'hardcase'];
+
+            foreach ($relations as $relation) {
+                $relatedModel = $model->$relation;
+
+                if ($relatedModel instanceof \Illuminate\Database\Eloquent\Collection) {
+                    // If it's a collection, delete each related model
+                    $relatedModel->each(function ($item) {
+                        $item->delete();
+                    });
+                } elseif ($relatedModel instanceof \Illuminate\Database\Eloquent\Model) {
+                    // If it's a single model, delete it
+                    $relatedModel->delete();
+                }
+            }
+        });
     }
 }

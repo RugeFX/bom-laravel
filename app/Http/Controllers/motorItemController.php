@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bom;
+use App\Models\GeneralItem;
+use App\Models\HardcaseItem;
 use App\Models\MotorItem;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -13,7 +15,7 @@ class motorItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public $possible_relations = ["bom.material.general", "reservation","plan"];
+    public $possible_relations = ["bom.material.general","bom.material.motor", "reservation","plan","hardcase","general"];
     public function index(Request $request)
     {
         $data = new MotorItem();
@@ -44,22 +46,29 @@ class motorItemController extends Controller
                 "bom_code" => "required|string|exists:boms,bom_code",
                 "name" => "required|string",
                 "code" => "required|string",
-                "plan_code"=>"required|string|exists:plans,plan_code"
+                "plan_code"=>"required|string|exists:plans,plan_code",
+                "hardcase_code"=>"string|exists:hardcaseItems,code|unique:motorItems,hardcase_code",
+                "general"=>"array",
+                "general.*.general_code"=>"string|exists:generalItems,code|unique:motorItem_generalItem,general_code",
+                'status'=>"required|string",
+                'information'=>"string",
             ]);
-            
-            $bom = Bom::with('material.general')->firstWhere('bom_code', $validated['bom_code']);
-            $stock = $bom->material;
-            $motorStock = $stock->map(function ($material) {
-                $motor = $material->general;
-                return $motor->quantity;
-            });
-            $helmetCount = MotorItem::count();
-            foreach($motorStock as $h){
-                if($h<=$helmetCount){
-                    return response()->json(["message" => "Failed", "data" => $helmetCount]);
+            $bom = Bom::with('material.motor')->firstWhere('bom_code', $validated['bom_code']);
+            $material = $bom->material;
+            $motorStock = $material->map(function ($material) {
+                return optional($material->motor)->quantity; // Use optional() to handle null values
+            })->filter()->toArray();
+            $moterCount = MotorItem::count();
+            foreach ($motorStock as $hc) {
+                if ($hc <= $moterCount) {
+                    return response()->json(["message" => "Failed", "data" => "Motor stock only " . $hc]);
                 }
             }
             $data = MotorItem::query()->create($validated);
+            $general = convert_array($validated['general']);
+            $data->general()->sync($general);
+            $data->update($validated);
+
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {
@@ -108,9 +117,15 @@ class motorItemController extends Controller
                 "bom_code" => "string|exists:boms,bom_code",
                 "name" => "string",
                 "code" => "string",
-                "plan_code"=>"string|exists:plans,plan_code"
+                "plan_code"=>"string|exists:plans,plan_code",
+                "hardcase_code"=>"string|exists:hardcaseItems,code",
+                "general"=>"array",
+                "general.*.general_code"=>"string|exists:generalItems,code",
+                'status'=>"string",
+                'information'=>"string",
             ]);
-
+            $general = convert_array($validated['general']);
+            $motorItem->general()->sync($general);
             $motorItem->update($validated);
 
             return response()->json(["message" => "Success", "data" => $motorItem]);
@@ -127,8 +142,9 @@ class motorItemController extends Controller
      */
     public function destroy(MotorItem $motorItem)
     {
-        $motorItem->delete();
+        // $motorItem->delete();
+        $code = $motorItem->general;
 
-        return response()->json(["message" => "Success"]);
+        return response()->json(["message" => $code]);
     }
 }

@@ -43,6 +43,9 @@ if (!function_exists('convert_array')) {
             if ($piece["fak_code"] ?? false) {
                 $result[$key]["fak_code"] = $piece["fak_code"];
             }
+            if ($piece["general_code"] ?? false) {
+                $result[$key]["general_code"] = $piece["general_code"];
+            }
             if ($piece["helmet_code"] ?? false) {
                 $result[$key]["helmet_code"] = $piece["helmet_code"];
             }

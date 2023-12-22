@@ -3,21 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bom;
-use App\Models\FakItem;
+use App\Models\GeneralItem;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
-class fakItemController extends Controller
+class generalItemController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public $possible_relations = ["bom.material.medicine", "reservation","plan"];
-
+    public $possible_relations = ["bom.material.general","bom.material.motor","reservation","plan","motorItems"];
     public function index(Request $request)
     {
-        $data = new FakItem();
+        $data = new GeneralItem();
 
         $relations = $request->input("relations");
         if ($relations) {
@@ -50,19 +49,18 @@ class fakItemController extends Controller
                 'information'=>"string",
             ]);
             
-            $bom = Bom::with('material.medicine')->firstWhere('bom_code', $validated['bom_code']);
-            $stock = $bom->material;
-            $fakStock = $stock->map(function ($material) {
-                $fak = $material->medicine;
-                return $fak->quantity;
-            });
-            $fakCount = FakItem::count();
-            foreach($fakStock as $h){
-                if($h<=$fakCount){
-                    return response()->json(["message" => "Failed", "data" => $fakCount]);
+            $bom = Bom::with('material.general')->firstWhere('bom_code', $validated['bom_code']);
+            $material = $bom->material;
+            $motorStock = $material->map(function ($material) {
+                return optional($material->general)->quantity; // Use optional() to handle null values
+            })->filter()->toArray();
+            $moterCount = GeneralItem::count();
+            foreach ($motorStock as $hc) {
+                if ($hc <= $moterCount) {
+                    return response()->json(["message" => "Failed", "data" => "Hardcase stock only " . $hc]);
                 }
+                $data = GeneralItem::query()->create($validated);
             }
-            $data = FakItem::query()->create($validated);
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {
@@ -76,9 +74,9 @@ class fakItemController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, string $id)
+    public function show(Request $request,string $id)
     {
-        $data = new FakItem();
+        $data = new GeneralItem();
 
         $relations = $request->input("relations");
         if ($relations) {
@@ -104,7 +102,7 @@ class fakItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, FakItem $fakItem)
+    public function update(Request $request, GeneralItem $generalItem)
     {
         try {
             $validated = $request->validate([
@@ -116,9 +114,9 @@ class fakItemController extends Controller
                 'information'=>"string",
             ]);
 
-            $fakItem->update($validated);
+            $generalItem->update($validated);
 
-            return response()->json(["message" => "Success", "data" => $fakItem]);
+            return response()->json(["message" => "Success", "data" => $generalItem]);
         } catch (\Exception $ex) {
             if ($ex instanceof ValidationException) {
                 return response()->json(["message" => "Failed", "error" => $ex->errors()], Response::HTTP_BAD_REQUEST);
@@ -130,9 +128,9 @@ class fakItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(FakItem $fakItem)
+    public function destroy(GeneralItem $generalItem)
     {
-        $fakItem->delete();
+        $generalItem->delete();
 
         return response()->json(["message" => "Success"]);
     }

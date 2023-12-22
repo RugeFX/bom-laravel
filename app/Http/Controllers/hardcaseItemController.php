@@ -3,21 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bom;
-use App\Models\FakItem;
+use App\Models\HardcaseItem;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
-class fakItemController extends Controller
+class hardcaseItemController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public $possible_relations = ["bom.material.medicine", "reservation","plan"];
+    public $possible_relations = ["bom.material.hardcase", "reservation","plan","motorItem"];
 
     public function index(Request $request)
     {
-        $data = new FakItem();
+        $data = new HardcaseItem();
 
         $relations = $request->input("relations");
         if ($relations) {
@@ -44,25 +44,26 @@ class fakItemController extends Controller
             $validated = $request->validate([
                 "bom_code" => "required|string|exists:boms,bom_code",
                 "name" => "required|string",
-                "code" => "required|string",
+                "code" => "required|string|unique:hardcaseItems,code",
                 "plan_code"=>"required|string|exists:plans,plan_code",
+                "monorack_code"=>"string|unique:hardcaseItems,monorack_code",
                 'status'=>"required|string",
                 'information'=>"string",
             ]);
             
-            $bom = Bom::with('material.medicine')->firstWhere('bom_code', $validated['bom_code']);
+            $bom = Bom::with('material.hardcase')->firstWhere('bom_code', $validated['bom_code']);
             $stock = $bom->material;
-            $fakStock = $stock->map(function ($material) {
-                $fak = $material->medicine;
-                return $fak->quantity;
+            $hardcaseStock = $stock->map(function ($material) {
+                $hardcase = $material->hardcase;
+                return $hardcase->quantity;
             });
-            $fakCount = FakItem::count();
-            foreach($fakStock as $h){
-                if($h<=$fakCount){
-                    return response()->json(["message" => "Failed", "data" => $fakCount]);
+            $hardcaseCount = HardcaseItem::count();
+            foreach($hardcaseStock as $h){
+                if($h<=$hardcaseCount){
+                    return response()->json(["message" => "Failed", "data" => $hardcaseCount]);
                 }
             }
-            $data = FakItem::query()->create($validated);
+            $data = HardcaseItem::query()->create($validated);
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {
@@ -76,9 +77,9 @@ class fakItemController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, string $id)
+    public function show(Request $request,string $id)
     {
-        $data = new FakItem();
+        $data = new HardcaseItem();
 
         $relations = $request->input("relations");
         if ($relations) {
@@ -104,21 +105,22 @@ class fakItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, FakItem $fakItem)
+    public function update(Request $request, HardcaseItem $hardcaseItem)
     {
         try {
             $validated = $request->validate([
                 "bom_code" => "string|exists:boms,bom_code",
                 "name" => "string",
-                "code" => "string",
+                "code" => "string|unique:hardcaseItems,code",
                 "plan_code"=>"string|exists:plans,plan_code",
+                "monorack_code"=>"string|unique:hardcaseItems,monorack_code",  
                 'status'=>"string",
                 'information'=>"string",
             ]);
 
-            $fakItem->update($validated);
+            $hardcaseItem->update($validated);
 
-            return response()->json(["message" => "Success", "data" => $fakItem]);
+            return response()->json(["message" => "Success", "data" => $hardcaseItem]);
         } catch (\Exception $ex) {
             if ($ex instanceof ValidationException) {
                 return response()->json(["message" => "Failed", "error" => $ex->errors()], Response::HTTP_BAD_REQUEST);
@@ -130,9 +132,9 @@ class fakItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(FakItem $fakItem)
+    public function destroy(HardcaseItem $hardcaseItem)
     {
-        $fakItem->delete();
+        $hardcaseItem->delete();
 
         return response()->json(["message" => "Success"]);
     }

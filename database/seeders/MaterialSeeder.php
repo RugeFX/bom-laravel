@@ -26,6 +26,18 @@ class MaterialSeeder extends Seeder
             ["item_code" => "HRCS-SIZE-43", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
             ["item_code" => "HRCS-SIZE-44", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
             ["item_code" => "HRCS-SIZE-45", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
+            ["item_code" => "MNRCK-SIZE-26", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
+            ["item_code" => "MNRCK-SIZE-30", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
+            ["item_code" => "MNRCK-SIZE-33", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
+            ["item_code" => "MNRCK-SIZE-36", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
+            ["item_code" => "MNRCK-SIZE-38", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
+            ["item_code" => "MNRCK-SIZE-39", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
+            ["item_code" => "MNRCK-SIZE-40", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
+            ["item_code" => "MNRCK-SIZE-41", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
+            ["item_code" => "MNRCK-SIZE-42", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
+            ["item_code" => "MNRCK-SIZE-43", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
+            ["item_code" => "MNRCK-SIZE-44", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
+            ["item_code" => "MNRCK-SIZE-45", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
             ["item_code" => "HLM-SIZE-S", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
             ["item_code" => "HLM-SIZE-M", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
             ["item_code" => "HLM-SIZE-L", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
@@ -44,6 +56,8 @@ class MaterialSeeder extends Seeder
             ["item_code" => "YMH-XSR", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
             ["item_code" => "HND-CRF-150L", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
             ["item_code" => "HND-CB-150X", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
+            ["item_code" => "ACCS-PH", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
+            ["item_code" => "ACCS-KW", "created_at" => \Carbon\Carbon::now(), "updated_at" => \Carbon\Carbon::now()],
         ]);
     }
 }

@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('reservesation_motor_item', function (Blueprint $table) {
-            $table->id();
             $table->string('motor_code');
             $table->foreign('motor_code')->references("code")->on('motorItems')->onDelete('cascade');
             $table->foreignId('reservation_id')->constrained('reservations')->onDelete('cascade');

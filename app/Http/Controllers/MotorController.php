@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bom;
-use App\Models\FakItem;
+use App\Models\Motor;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
-class fakItemController extends Controller
+class MotorController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public $possible_relations = ["bom.material.medicine", "reservation","plan"];
+    public $possible_relations = ["master", "material"];
 
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
-        $data = new FakItem();
+        $data = new Motor();
 
         $relations = $request->input("relations");
         if ($relations) {
@@ -28,41 +30,19 @@ class fakItemController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         try {
             $validated = $request->validate([
-                "bom_code" => "required|string|exists:boms,bom_code",
+                "item_code" => "required|string|unique:materials,item_code",
                 "name" => "required|string",
-                "code" => "required|string",
-                "plan_code"=>"required|string|exists:plans,plan_code",
-                'status'=>"required|string",
-                'information'=>"string",
+                "quantity" => "required|integer",
             ]);
-            
-            $bom = Bom::with('material.medicine')->firstWhere('bom_code', $validated['bom_code']);
-            $stock = $bom->material;
-            $fakStock = $stock->map(function ($material) {
-                $fak = $material->medicine;
-                return $fak->quantity;
-            });
-            $fakCount = FakItem::count();
-            foreach($fakStock as $h){
-                if($h<=$fakCount){
-                    return response()->json(["message" => "Failed", "data" => $fakCount]);
-                }
-            }
-            $data = FakItem::query()->create($validated);
+            $validated["master_code"] = "MSMTR";
+
+            $data = Motor::query()->create($validated);
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {
@@ -78,7 +58,7 @@ class fakItemController extends Controller
      */
     public function show(Request $request, string $id)
     {
-        $data = new FakItem();
+        $data = new Motor();
 
         $relations = $request->input("relations");
         if ($relations) {
@@ -94,31 +74,30 @@ class fakItemController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, FakItem $fakItem)
+    public function update(Request $request, string $id)
     {
+        $data = Motor::query()->with(["material"])->find($id);
+
+        if (!$data) {
+            return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
+        }
+
         try {
             $validated = $request->validate([
-                "bom_code" => "string|exists:boms,bom_code",
+                "item_code" => ["string", \Illuminate\Validation\Rule::unique('materials', 'item_code')->ignore($data->item_code, "item_code")],
                 "name" => "string",
-                "code" => "string",
-                "plan_code"=>"string|exists:plans,plan_code",
-                'status'=>"string",
-                'information'=>"string",
+                "quantity" => "integer",
             ]);
 
-            $fakItem->update($validated);
+            $data->fill($validated);
+            if (array_key_exists("item_code", $validated)) {
+                $data->material->item_code = $validated["item_code"];
+            }
+            $data->push();
 
-            return response()->json(["message" => "Success", "data" => $fakItem]);
+            return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {
             if ($ex instanceof ValidationException) {
                 return response()->json(["message" => "Failed", "error" => $ex->errors()], Response::HTTP_BAD_REQUEST);
@@ -130,9 +109,15 @@ class fakItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(FakItem $fakItem)
+    public function destroy(string $id)
     {
-        $fakItem->delete();
+        $data = Motor::query()->find($id);
+
+        if (!$data) {
+            return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
+        }
+
+        $data->delete();
 
         return response()->json(["message" => "Success"]);
     }
