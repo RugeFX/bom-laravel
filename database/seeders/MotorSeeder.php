@@ -110,14 +110,6 @@ class MotorSeeder extends Seeder
                 "created_at" => \Carbon\Carbon::now(), 
                 "updated_at" => \Carbon\Carbon::now()
             ],
-            [
-                "master_code" => "MSGNRL",
-                "item_code" => "HND-CB-150X",
-                "name" => "CB 150X",
-                "quantity" => 12,
-                "created_at" => \Carbon\Carbon::now(), 
-                "updated_at" => \Carbon\Carbon::now()
-            ],
         ]);
     }
 }
