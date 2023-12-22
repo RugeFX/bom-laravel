@@ -12,8 +12,8 @@ class MaterialController extends Controller
      */
     public function index()
     {
-        $items = Material::with(["helmet", "medicine", "general", "hardcase"])->get()->map(function ($data) {
-                $item = $data->helmet ?? $data->medicine ?? $data->general ?? $data->hardcase;
+        $items = Material::with(["helmet", "medicine", "general", "hardcase","motor"])->get()->map(function ($data) {
+                $item = $data->helmet ?? $data->medicine ?? $data->general ?? $data->hardcase ?? $data->motor;
                 return [
                     "id" => $item->id,
                     "item_code" => $item->item_code,

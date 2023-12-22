@@ -16,19 +16,12 @@ class Motor extends Model
         'item_code',
         'quantity',
         'master_code'
-        // 'color_id',
     ];
 
     public function master()
     {
         return $this->belongsTo(Master::class, "master_code", "master_code");
     }
-
-    // public function color()
-    // {
-    //     return $this->belongsTo(Color::class);
-    // }
-
     public function material()
     {
         return $this->belongsTo(Material::class, "item_code", "item_code");

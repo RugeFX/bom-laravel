@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             MaterialSeeder::class,
             BomSeeder::class,
             PlanSeeder::class,
+            MotorSeeder::class
         ]);
     }
 }
