@@ -2,29 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bom;
-use App\Models\GeneralItem;
-use App\Models\HardcaseItem;
-use App\Models\MotorItem;
+use App\Models\Menugroup;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
-class motorItemController extends Controller
+class MenugroupController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public $possible_relations = ["bom.material.general","bom.material.motor", "reservation","plan","hardcase","general"];
+    public $possible_relations = ["menuitem"];
     public function index(Request $request)
     {
-        $data = new MotorItem();
+        $data = new Menugroup();
 
         $relations = $request->input("relations");
         if ($relations) {
             $data = handle_relations($relations, $this->possible_relations, $data);
         }
-
         return response()->json(["message" => "Success", "data" => $data->get()]);
     }
 
@@ -43,32 +39,11 @@ class motorItemController extends Controller
     {
         try {
             $validated = $request->validate([
-                "bom_code" => "required|string|exists:boms,bom_code",
+                "code" => "required|string|unique:menugroups,code",
                 "name" => "required|string",
-                "code" => "required|string",
-                "plan_code"=>"required|string|exists:plans,plan_code",
-                "hardcase_code"=>"string|exists:hardcaseItems,code|unique:motorItems,hardcase_code",
-                "general"=>"array",
-                "general.*.general_code"=>"string|exists:generalItems,code|unique:motorItem_generalItem,general_code",
-                'status'=>"required|string",
-                'information'=>"string",
             ]);
-            $bom = Bom::with('material.motor')->firstWhere('bom_code', $validated['bom_code']);
-            $material = $bom->material;
-            $motorStock = $material->map(function ($material) {
-                return optional($material->motor)->quantity; // Use optional() to handle null values
-            })->filter()->toArray();
-            $moterCount = MotorItem::count();
-            foreach ($motorStock as $hc) {
-                if ($hc <= $moterCount) {
-                    return response()->json(["message" => "Failed", "data" => "Motor stock only " . $hc]);
-                }
-            }
-            $data = MotorItem::query()->create($validated);
-            $general = convert_array($validated['general']);
-            $data->general()->sync($general);
-            $data->update($validated);
 
+            $data = Menugroup::query()->create($validated);
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {
@@ -82,9 +57,9 @@ class motorItemController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request,string $id)
+    public function show(Request $request, string $id)
     {
-        $data = new MotorItem();
+        $data = new Menugroup();
 
         $relations = $request->input("relations");
         if ($relations) {
@@ -110,25 +85,17 @@ class motorItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, MotorItem $motorItem)
+    public function update(Request $request, Menugroup $menugroup)
     {
         try {
             $validated = $request->validate([
-                "bom_code" => "string|exists:boms,bom_code",
+                "code" => "string|unique:menugroups,code",
                 "name" => "string",
-                "code" => "string",
-                "plan_code"=>"string|exists:plans,plan_code",
-                "hardcase_code"=>"string|exists:hardcaseItems,code",
-                "general"=>"array",
-                "general.*.general_code"=>"string|exists:generalItems,code",
-                'status'=>"string",
-                'information'=>"string",
             ]);
-            $general = convert_array($validated['general']);
-            $motorItem->general()->sync($general);
-            $motorItem->update($validated);
 
-            return response()->json(["message" => "Success", "data" => $motorItem]);
+           $menugroup->update($validated);
+
+            return response()->json(["message" => "Success", "data" => $menugroup]);
         } catch (\Exception $ex) {
             if ($ex instanceof ValidationException) {
                 return response()->json(["message" => "Failed", "error" => $ex->errors()], Response::HTTP_BAD_REQUEST);
@@ -140,9 +107,13 @@ class motorItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MotorItem $motorItem)
+    public function destroy(Menugroup $menugroup)
     {
-        $motorItem->delete();
+        if (!$menugroup) {
+            return response()->json(["message" => "Failed", "error" => "Record not found!"], Response::HTTP_NOT_FOUND);
+        }
+
+        $menugroup->delete();
 
         return response()->json(["message" => "Success"]);
     }

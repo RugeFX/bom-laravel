@@ -36,11 +36,12 @@ class SizemasterController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => "required|string",
-            'master_id' => 'required|integer'
+            'master_code' => 'required|string|exists:masters,master_code'
         ]);
         if ($validator->fails()) {
             return response()->json([
-                "message" => $validator->errors()
+                "message" => "Failed",
+                "error" => $validator->errors()
             ], Response::HTTP_BAD_REQUEST);
         }
         $validated = $validator->validated();
@@ -49,6 +50,7 @@ class SizemasterController extends Controller
             $newValue = Size::create($validated);
         } catch (\Exception $e) {
             return response()->json([
+                "message" => "Failed",
                 "error" => $e
             ], Response::HTTP_BAD_REQUEST);
         }
@@ -85,11 +87,12 @@ class SizemasterController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => "string",
-            'master_id' => 'integer'
+            'master_code' => 'string|exists:masters,master_code'
         ]);
         if ($validator->fails()) {
             return response()->json([
-                "message" => $validator->errors()
+                "message" => "Failed",
+                "error" => $validator->errors()
             ], Response::HTTP_BAD_REQUEST);
         }
         $validated = $validator->validated();
@@ -98,6 +101,7 @@ class SizemasterController extends Controller
             $size->update($validated);
         } catch (\Exception $e) {
             return response()->json([
+                "message" => "Failed",
                 "error" => $e
             ], Response::HTTP_BAD_REQUEST);
         }

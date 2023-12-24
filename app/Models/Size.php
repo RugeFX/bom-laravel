@@ -11,7 +11,7 @@ class Size extends Model
 
     protected $fillable = [
         'name',
-        'master_id'
+        'master_code'
     ];
 
     public function master()

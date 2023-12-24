@@ -12,18 +12,18 @@ class MaterialController extends Controller
      */
     public function index()
     {
-        $items = Material::with(["helmet", "medicine", "general", "hardcase","motor"])->get()->map(function ($data) {
-                $item = $data->helmet ?? $data->medicine ?? $data->general ?? $data->hardcase ?? $data->motor;
-                return [
-                    "id" => $item->id,
-                    "item_code" => $item->item_code,
-                    "name" => $item->name,
-                    "model" => $item->getTable(),
-                    "created_at" => $item->created_at,
-                    "updated_at" => $item->updated_at,
-                ];
-            });
-
+        $items = Material::with(["helmet", "medicine", "general", "hardcase", "motor"])->get()->map(function ($data) {
+            $item = $data->helmet ?? $data->medicine ?? $data->general ?? $data->hardcase ?? $data->motor;
+            return [
+                "id" => $item->id,
+                "item_code" => $item->item_code,
+                "name" => $item->name,
+                "quantity" => $item->quantity,
+                "model" => $item->getTable(),
+                "created_at" => $item->created_at,
+                "updated_at" => $item->updated_at,
+            ];
+        });
         return response()->json([
             "message" => "Success",
             "data" => $items,
@@ -51,8 +51,8 @@ class MaterialController extends Controller
      */
     public function show(string $id)
     {
-        $material = Material::with(["helmet", "medicine", "general", "hardcase"])
-        ->find($id);
+        $material = Material::with(["helmet", "medicine", "general", "hardcase", "motor"])
+            ->find($id);
 
         if (!$material) {
             return response()->json([
@@ -61,13 +61,17 @@ class MaterialController extends Controller
             ], 404);
         }
 
-        $item = $material->helmet ?? $material->medicine ?? $material->general ?? $material->hardcase;
+        $item = $material->helmet ?? $material->medicine ?? $material->general ?? $material->hardcase ?? $material->motor;
 
         $response = [
-            "id" => $item->id,
             "item_code" => $item->item_code,
+            "id" => $item->id,
             "name" => $item->name,
+            "quantity" => $item->quantity,
             "model" => $item->getTable(),
+            "attributes" => [
+                "size" => $item->size
+            ],
             "created_at" => $item->created_at,
             "updated_at" => $item->updated_at,
         ];

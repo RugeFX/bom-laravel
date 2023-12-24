@@ -158,19 +158,7 @@ class ReservationController extends Controller
     public function destroy(Reservation $reservation)
     {
         
-        // $reservation->delete();
-        $reservation->load('helmetItems','fakItems','motorItems');
-        $motorcode = $reservation->motorItems->pluck('code');
-        foreach ($motorcode as $c) {
-            $motorItem = MotorItem::with('general')->firstWhere('code', $c);
-            $generalcode = $motorItem;
-            $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
-            // $motorItem->update(['plan_code' => $planCode]);
-            foreach($generalcode as $c){
-                $generalItem = GeneralItem::where('code', $c)->first();
-                // $generalItem->update(['plan_code' => $planCode]);
-            }
-        }
-        return response()->json(["message" => $generalcode]);
+        $reservation->delete();
+        return response()->json(["message" => "Success"]);
     }
 }

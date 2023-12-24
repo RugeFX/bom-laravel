@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('menuitems', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->unique();
-            $table->string('password');
-            $table->string('staff_code')->unique();
-            $table->foreignId("staff_code")->references('code')->on("staffs")->onDelete("cascade");
-            $table->rememberToken();
+            $table->string('name');
+            $table->string('url');
+            $table->string('menugroup_code')->unique();
+            $table->foreignId('menugroup_code')->references('code')->on("menugroups")->onDelete("cascade");
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('menuitems');
     }
 };
