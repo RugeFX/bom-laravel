@@ -13,15 +13,12 @@ class Staff extends Model
         "code",
         "name",
         "urlImage",
-        "registerDate",
-        "address",
-        "phone",
         "role_code",
         "information",
     ];
 
-    public function position(){
-        return $this->belongsTo(Role::class,"code","role_code");
+    public function role(){
+        return $this->belongsTo(Role::class,"role_code","code");
     }
     public function user(){
         return $this->hasOne(User::class,"staff_code","code");

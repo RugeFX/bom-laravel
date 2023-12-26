@@ -16,19 +16,24 @@ class Reservation extends Model
         'fak_code',
         'helmet_code',
         'motor_code',
+        'hardcase_code',
         'status',
         'information',
     ];
     public function helmetItems(){
-        return $this->belongsToMany(HelmetItem::class,'reservations_helmetItem','reservation_id','helmet_code')->withPivot('helmet_code');
+        return $this->belongsToMany(HelmetItem::class,'reservations_helmetItem','reservation_id','helmet_code')->withPivot('helmet_code','status');
     }
 
     public function fakItems(){
-        return $this->belongsToMany(FakItem::class,'reservations_fakItem','reservation_id','fak_code')->withPivot('fak_code');
+        return $this->belongsToMany(FakItem::class,'reservations_fakItem','reservation_id','fak_code')->withPivot('fak_code','status');
+    }
+
+    public function hardcaseItems(){
+        return $this->belongsToMany(HardcaseItem::class,'reservations_hardcaseitem','reservation_id','hardcase_code')->withPivot('hardcase_code','status');
     }
 
     public function motorItems(){
-        return $this->belongsToMany(MotorItem::class,'reservesation_motor_item','reservation_id','motor_code')->withPivot('motor_code');
+        return $this->belongsToMany(MotorItem::class,'reservesation_motor_item','reservation_id','motor_code')->withPivot('motor_code','status');
     }
 
     public function pickup(){
@@ -42,44 +47,74 @@ class Reservation extends Model
     public static function booted(): void
     {
         static::saved(function (Reservation $reservation) {
-            $reservation->load('helmetItems','fakItems','motorItems.general');
-            $motorcode = $reservation->motorItems->pluck('code');
-            foreach ($motorcode as $c) {
-                $motorItem = MotorItem::where('code', $c)->first();
-                $generalcode = $motorItem->general->pluck('code');
+            $reservation->load('helmetItems', 'fakItems', 'motorItems.general','hardcaseItems');
+        
+            // Update Motor Items
+            foreach ($reservation->motorItems as $motorItem) {
                 $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
-                $motorItem->update(['plan_code' => $planCode]);
-                foreach($generalcode as $c){
-                    $generalItem = GeneralItem::where('code', $c)->first();
-                    $generalItem->update(['plan_code' => $planCode]);
+                $status =  $motorItem->pivot->status ?? 'In Rental';
+        
+                $motorItem->update([
+                    'plan_code' => $planCode,
+                    'status' => $status,
+                ]);
+            }
+        
+            // Update General Items
+            foreach ($reservation->motorItems as $motorItem) {
+                foreach ($motorItem->general as $generalItem) {
+                    $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
+                    $status = $motorItem->pivot->status ?? 'In Rental';
+        
+                    $generalItem->update([
+                        'plan_code' => $planCode,
+                        'status' => $status,
+                    ]);
                 }
             }
-
+        
             // Update Helmet Items
-            $helmetcode = $reservation->helmetItems->pluck('code');
-            foreach ($helmetcode as $c) {
-                $helmetItem = HelmetItem::where('code', $c)->first();
+            foreach ($reservation->helmetItems as $helmetItem) {
                 if ($helmetItem) {
                     $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
-                    $helmetItem->update(['plan_code' => $planCode]);
+                    $status = $helmetItem->pivot->status ?? 'In Rental';
+        
+                    $helmetItem->update([
+                        'plan_code' => $planCode,
+                        'status' => $status,
+                    ]);
                 }
             }
 
-            // Update Fak Items
-            $fakcode = $reservation->fakItems->pluck('code');
-            foreach ($fakcode as $c) {
-                $fakItem = FakItem::where('code', $c)->first();
+            foreach ($reservation->hardcaseItems as $hardcaseItem) {
+                if ($hardcaseItem) {
+                    $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
+                    $status = ($motorItem->pivot->status === 'Out Of Service') ? $motorItem->pivot->status : ($hardcaseItem->pivot->status ?? 'In Rental');
+        
+                    $hardcaseItem->update([
+                        'plan_code' => $planCode,
+                        'status' => $status,
+                    ]);
+                }
+            }
+
+            foreach ($reservation->fakItems as $fakItem) {
                 if ($fakItem) {
                     $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
-                    $fakItem->update(['plan_code' => $planCode]);
+                    $status =  $fakItem->pivot->status ?? 'In Rental';
+        
+                    $fakItem->update([
+                        'plan_code' => $planCode,
+                        'status' => $status,
+                    ]);
                 }
             }
-
         });
         static::deleting(function (Reservation $reservation) {
             $reservation->motorItems()->detach();
             $reservation->fakItems()->detach();
             $reservation->helmetItems()->detach();
+            $reservation->hardcaseItems()->detach();
         });
     }
 }

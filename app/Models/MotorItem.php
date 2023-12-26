@@ -23,7 +23,6 @@ class MotorItem extends Model
         'status',
         'information',
     ];
-
     public function bom(){
         return $this->belongsTo(Bom::class,'bom_code','bom_code');
     }
@@ -42,18 +41,36 @@ class MotorItem extends Model
     public static function booted(): void
     {
         static::saved(function (MotorItem $motorItem) {
-            $motorItem->load('general');
-            $code = $motorItem->general->pluck('code');
-            foreach($code as $c){
-                $generalItem = GeneralItem::where('code', $c)->first();
-                $generalItem->update(['plan_code' => $motorItem->plan_code]);
+            $motorItem->load('general','hardcase');
+            $status = $motorItem->status;
+            foreach ($motorItem->general as $generalItem) {
+                $generalItem->update([
+                    'plan_code' => $motorItem->plan_code,
+                    'status' => $status,
+                ]);
             }
-            $hardcase_code = $motorItem->hardcase_code;
-            $hardcaseItem = HardcaseItem::where('code', $hardcase_code)->first();
-            $hardcaseItem->update(['plan_code' => $motorItem->plan_code]);
+            $hardcase = $motorItem->hardcase;
+            $hardcase->update([
+                'status' => $status,
+                'plan_code' => $motorItem->plan_code
+            ]);
         });
         static::deleting(function (MotorItem $motorItem) {
+            $motorItem->load('general','hardcase');
+            foreach ($motorItem->general as $generalItem) {
+                $status = ($motorItem->status === 'Out Of Service') ? "Ready For Rent" : (($generalItem->status === 'Scrab') ? 'Scrab' : 'In Rental');
+                $generalItem->update([
+                    'status' => $status,
+                ]);
+            }
+            $hardcase = $motorItem->hardcase;
+            $status = ($motorItem->status === 'Out Of Service') ? "Ready For Rent" : (($hardcase->status === 'Scrab') ? 'Scrab' : 'In Rental');
+            $hardcase->update([
+                'status' => $status,
+            ]);
             $motorItem->general()->detach();
+            $motorItem->hardcase()->detach();
+
         });
     }
 }

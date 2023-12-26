@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('motorItems', function (Blueprint $table) {
-            $table->id();
             $table->string('code')->unique();
             $table->string('name');
             $table->string('bom_code');
@@ -21,7 +20,7 @@ return new class extends Migration
             $table->foreign('plan_code')->references("plan_code")->on('plans')->onDelete('cascade');
             $table->string('hardcase_code')->nullable()->unique();
             $table->foreign('hardcase_code')->references("code")->on('hardcaseItems')->onDelete('cascade');
-            $table->string('status');
+            $table->enum('status',['Ready For Rent','Out Of Service','In Rental']);
             $table->string('information')->nullable();
             $table->timestamps();
         });

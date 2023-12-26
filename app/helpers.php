@@ -40,6 +40,12 @@ if (!function_exists('convert_array')) {
         foreach ($data as $key => $piece) {
             $result[$key] = [];
 
+            if ($piece["status"] ?? false) {
+                $result[$key]["status"] = $piece["status"];
+            }
+            if ($piece["hardcase_code"] ?? false) {
+                $result[$key]["hardcase_code"] = $piece["hardcase_code"];
+            }
             if ($piece["fak_code"] ?? false) {
                 $result[$key]["fak_code"] = $piece["fak_code"];
             }

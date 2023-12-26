@@ -93,7 +93,7 @@ class PlanController extends Controller
     {
         try {
             $validated = $request->validate([
-                "plan_code"=> ["string", \Illuminate\Validation\Rule::unique('plans', 'plan_code')->ignore($plan->item_code, "plan_code")],
+                "plan_code"=> ["string", \Illuminate\Validation\Rule::unique('plans', 'plan_code')->ignore($plan->plan_code, "plan_code")],
                 "name" => "string",
                 "address" => "string",
             ]);

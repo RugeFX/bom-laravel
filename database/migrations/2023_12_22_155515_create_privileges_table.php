@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('privileges', function (Blueprint $table) {
             $table->id();
-            $table->string('role_code')->unique();
+            $table->string('role_code');
             $table->foreign('role_code')->references('code')->on("roles")->onDelete("cascade");
-            $table->string('menuitem_code')->unique();
-            $table->foreignId('menuitem_code')->references('code')->on("menuitems")->onDelete("cascade");
+            $table->string('menuitem_code');
+            $table->foreign('menuitem_code')->references('code')->on("menuitems")->onDelete("cascade");
             $table->tinyInteger('view');    
             $table->tinyInteger('add');
             $table->tinyInteger('edit');

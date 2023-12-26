@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reservations_fakItem', function (Blueprint $table) {
-            $table->string('fak_code');
-            $table->enum('status',['Complete','Incomplete'])->nullable();
-            $table->foreign('fak_code')->references("code")->on('fakItems')->onDelete('cascade');
+        Schema::create('reservations_hardcaseitem', function (Blueprint $table) {
+            $table->string('hardcase_code');
+            $table->enum('status',['Lost','Scrab','Ready For Rent','Out Of Service'])->nullable();
+            $table->foreign('hardcase_code')->references("code")->on('hardcaseItems')->onDelete('cascade');
             $table->foreignId('reservation_id')->constrained('reservations')->onDelete('cascade');
             $table->timestamps();
         });
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reservations_fakItem');
+        Schema::dropIfExists('reservations_hardcaseitem');
     }
 };

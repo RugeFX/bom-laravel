@@ -2,30 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bom;
-use App\Models\HardcaseItem;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-class hardcaseItemController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public $possible_relations = ["bom.material.hardcase", "reservation","plan","motorItem"];
+    public $possible_relations = ["staff.role.privilege.menuitem.menugroup"];
 
     public function index(Request $request)
     {
-        $data = new HardcaseItem();
+        $data = new User();
 
         $relations = $request->input("relations");
         if ($relations) {
             $data = handle_relations($relations, $this->possible_relations, $data);
         }
 
-        return response()->json(["message" => "Success", "data" => $data->get()]);
+        return response()->json([
+            "message" => "Success",
+            "data" => $data->get()
+        ]);
     }
 
     /**
@@ -43,32 +44,11 @@ class hardcaseItemController extends Controller
     {
         try {
             $validated = $request->validate([
-                "bom_code" => "required|string|exists:boms,bom_code",
-                "name" => "required|string",
-                "code" => "required|string|unique:hardcaseItems,code",
-                "plan_code"=>"required|string|exists:plans,plan_code",
-                "monorack_code"=>"string|unique:hardcaseItems,monorack_code",
-                'status' => [
-                    'required',
-                    'string',
-                    Rule::in(['Ready For Rent','Scrab','In Rental']),
-                ],
-                'information'=>"string",
+                "username"=>"required|string|unique:users,username",
+                "password"=>"required|string",
+                "staff_code"=>"required|string|exists:roles,code|unique:users,staff_code",
             ]);
-            
-            $bom = Bom::with('material.hardcase')->firstWhere('bom_code', $validated['bom_code']);
-            $stock = $bom->material;
-            $hardcaseStock = $stock->map(function ($material) {
-                $hardcase = $material->hardcase;
-                return $hardcase->quantity;
-            });
-            $hardcaseCount = HardcaseItem::count();
-            foreach($hardcaseStock as $h){
-                if($h<=$hardcaseCount){
-                    return response()->json(["message" => "Failed", "data" => $hardcaseCount]);
-                }
-            }
-            $data = HardcaseItem::query()->create($validated);
+            $data = User::query()->create($validated);
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {
@@ -84,7 +64,7 @@ class hardcaseItemController extends Controller
      */
     public function show(Request $request,string $id)
     {
-        $data = new HardcaseItem();
+        $data = new User();
 
         $relations = $request->input("relations");
         if ($relations) {
@@ -110,25 +90,18 @@ class hardcaseItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, HardcaseItem $hardcaseItem)
+    public function update(Request $request, User $user)
     {
         try {
             $validated = $request->validate([
-                "bom_code" => "string|exists:boms,bom_code",
-                "name" => "string",
-                "code" => "string|unique:hardcaseItems,code",
-                "plan_code"=>"string|exists:plans,plan_code",
-                "monorack_code"=>"string|unique:hardcaseItems,monorack_code",  
-                'status' => [
-                    'string',
-                    Rule::in(['Ready For Rent','Scrab','In Rental']),
-                ],
-                'information'=>"string",
+                "staff_code"=> ["string", \Illuminate\Validation\Rule::unique('users', 'staff_code')->ignore($user->staff_code, "staff_code"), \Illuminate\Validation\Rule::exists('staffs', 'code')],
+                "username"=>[\Illuminate\Validation\Rule::unique('users', 'username')->ignore($user->staff_code, "username")],
+                "password"=>"string",
             ]);
 
-            $hardcaseItem->update($validated);
+            $user->update($validated);
 
-            return response()->json(["message" => "Success", "data" => $hardcaseItem]);
+            return response()->json(["message" => "Success", "data" => $user]);
         } catch (\Exception $ex) {
             if ($ex instanceof ValidationException) {
                 return response()->json(["message" => "Failed", "error" => $ex->errors()], Response::HTTP_BAD_REQUEST);
@@ -140,10 +113,9 @@ class hardcaseItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HardcaseItem $hardcaseItem)
+    public function destroy(User $user)
     {
-        $hardcaseItem->delete();
-
+        $user->delete();
         return response()->json(["message" => "Success"]);
     }
 }

@@ -8,6 +8,7 @@ use App\Models\MotorItem;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class ReservationController extends Controller
@@ -15,7 +16,7 @@ class ReservationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public $possible_relations = ["helmetItems", "fakItems","return","pickup","motoritems.general"];
+    public $possible_relations = ["helmetItems", "fakItems","motorItems","hardcaseItems","return","pickup","motoritems.general"];
 
     public function index(Request $request)
     {
@@ -47,17 +48,24 @@ class ReservationController extends Controller
                 "pickupPlan_code" => "required|string|exists:plans,plan_code",
                 "reservation_code" => "required|string|unique:reservations,reservation_code",
                 'helmet' => 'required|array',
-                'fak' => 'required|array',
+                'fak' => 'array',
                 'motor' => 'required|array',
+                'hardcase' => 'array',
                 "fak.*.fak_code" => "string|exists:fakItems,code",
                 "helmet.*.helmet_code"=>"required|string|exists:helmetitems,code",
                 "motor.*.motor_code"=>"required|string|exists:motorItems,code",
-                'status'=>"required|string",
+                "hardcase.*.hardcase_code"=>"string|exists:hardcaseItems,code",
+                'status'=>[
+                    'required',
+                    'string',
+                    Rule::in(['Finished Rental','In Rental']),
+                ],
                 'information'=>"string",
             ]);
             $fak = convert_array($validated["fak"]);
             $helmet = convert_array($validated["helmet"]);
             $motor = convert_array($validated["motor"]);
+            $hardcase = convert_array($validated["hardcase"]);
             $data = Reservation::query()->create($validated);
             foreach ($validated['motor'] as $piece) {
                 if ($piece["motor_code"] ?? false) {
@@ -72,6 +80,11 @@ class ReservationController extends Controller
             foreach ($validated['fak'] as $piece) {
                 if ($piece["fak_code"] ?? false) {
                     $data->fakItems()->sync($fak);
+                }
+            }
+            foreach ($validated['hardcase'] as $piece) {
+                if ($piece["hardcase_code"] ?? false) {
+                    $data->hardcaseItems()->sync($hardcase);
                 }
             }
             $data->update($validated);
@@ -119,26 +132,60 @@ class ReservationController extends Controller
     {
         try {
             $validated = $request->validate([
-                "pickupPlan_code" => "string|exists:plans,plan_code",
-                "reservation_code" => "string|unique:reservation,reservation_code",
-                'item' => 'array',
-                "item.*.fak_code" => "string|exists:fakItems,code",
-                "item.*.helmet_code"=>"string|exists:helmetitems,code",
-                "item.*.motor_code"=>"string|exists:motorItems,code",
-                'status'=>"string",
+                "returnPlan_code" => "string|exists:plans,plan_code",
+                "reservation_code" => ["string", \Illuminate\Validation\Rule::unique('reservations', 'reservation_code')->ignore($reservation->reservation_code, "reservation_code")],
+                'helmet' => 'array',
+                'fak' => 'array',
+                'motor' => 'array',
+                'hardcase' => 'array',
+                "fak.*.fak_code" => "string|exists:fakItems,code",
+                "hardcase.*.hardcase_code" => "string|exists:hardcaseItems,code",
+                "helmet.*.helmet_code"=>"string|exists:helmetitems,code",
+                "motor.*.motor_code"=>"string|exists:motorItems,code",
+                "fak.*.status" =>[
+                    'string',
+                    Rule::in(['Complete','Incomplete']),
+                ],
+                "helmet.*.status"=> [
+                    'string',
+                    Rule::in(['Lost','Scrab','Ready For Rent']),
+                ],
+                "motor.*.status"=>[
+                    'string',
+                    Rule::in(['Ready For Rent', 'Out Of Service']),
+                ],
+                "hardcase.*.status"=>[
+                    'string',
+                    Rule::in(['Lost','Scrab','Ready For Rent']),
+                ],
+                'status'=>[
+                    'string',
+                    Rule::in(['Finished Rental','In Rental']),
+                ],
                 'information'=>"string",
             ]);
-            $item = convert_array($validated["item"]);
-            foreach ($validated['item'] as $piece) {
-                
-                if ($piece["fak_code"] ?? false) {
-                    $reservation->fakItems()->sync($item);
-                }
-                if ($piece["helmet_code"] ?? false) {
-                    $reservation->helmetItems()->sync($item);
-                }
+            $fak = convert_array($validated["fak"]);
+            $helmet = convert_array($validated["helmet"]);
+            $motor = convert_array($validated["motor"]);
+            $hardcase = convert_array($validated["hardcase"]);
+            foreach ($validated['motor'] as $piece) {
                 if ($piece["motor_code"] ?? false) {
-                    $reservation->motorItems()->sync($item);
+                    $reservation->motorItems()->sync($motor);
+                }
+            }
+            foreach ($validated['helmet'] as $piece) {
+                if ($piece["helmet_code"] ?? false) {
+                    $reservation->helmetItems()->sync($helmet);
+                }
+            }
+            foreach ($validated['fak'] as $piece) {
+                if ($piece["fak_code"] ?? false) {
+                    $reservation->fakItems()->sync($fak);
+                }
+            }
+            foreach ($validated['hardcase'] as $piece) {
+                if ($piece["hardcase_code"] ?? false) {
+                    $reservation->hardcaseItems()->sync($hardcase);
                 }
             }
             $reservation->update($validated);

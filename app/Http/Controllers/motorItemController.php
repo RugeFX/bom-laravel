@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bom;
-use App\Models\GeneralItem;
-use App\Models\HardcaseItem;
 use App\Models\MotorItem;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class motorItemController extends Controller
@@ -50,7 +49,11 @@ class motorItemController extends Controller
                 "hardcase_code"=>"string|exists:hardcaseItems,code|unique:motorItems,hardcase_code",
                 "general"=>"array",
                 "general.*.general_code"=>"string|exists:generalItems,code|unique:motorItem_generalItem,general_code",
-                'status'=>"required|string",
+                'status' => [
+                    'required',
+                    'string',
+                    Rule::in(['Ready For Rent', 'Out Of Service', 'In Rental']),
+                ],
                 'information'=>"string",
             ]);
             $bom = Bom::with('material.motor')->firstWhere('bom_code', $validated['bom_code']);
@@ -121,7 +124,10 @@ class motorItemController extends Controller
                 "hardcase_code"=>"string|exists:hardcaseItems,code",
                 "general"=>"array",
                 "general.*.general_code"=>"string|exists:generalItems,code",
-                'status'=>"string",
+                'status' => [
+                    'string',
+                    Rule::in(['Ready For Rent', 'Out Of Service', 'In Rental']),
+                ],
                 'information'=>"string",
             ]);
             $general = convert_array($validated['general']);

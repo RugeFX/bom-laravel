@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('staffs', function (Blueprint $table) {
             $table->id();
-            $table->string("name")->unique();
+            $table->string("code")->unique();
+            $table->string("name");
             $table->string("urlImage")->nullable();
             $table->string("role_code");
-            $table->foreignId("role_code")->references("code")->on("roles")->onDelete("cascade");
+            $table->foreign("role_code")->references("code")->on("roles")->onDelete("cascade");
             $table->string("information")->nullable();
             $table->timestamps();
         });

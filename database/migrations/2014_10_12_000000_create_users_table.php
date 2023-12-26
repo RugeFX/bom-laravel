@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('password');
             $table->string('staff_code')->unique();
-            $table->foreignId("staff_code")->references('code')->on("staffs")->onDelete("cascade");
+            $table->foreign("staff_code")->references('code')->on("staffs")->onDelete("cascade");
             $table->rememberToken();
             $table->timestamps();
         });
