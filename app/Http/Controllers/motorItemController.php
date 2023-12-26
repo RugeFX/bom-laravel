@@ -47,8 +47,8 @@ class motorItemController extends Controller
                 "code" => "required|string",
                 "plan_code"=>"required|string|exists:plans,plan_code",
                 "hardcase_code"=>"string|exists:hardcaseItems,code|unique:motorItems,hardcase_code",
-                "general"=>"array",
-                "general.*.general_code"=>"string|exists:generalItems,code|unique:motorItem_generalItem,general_code",
+                "general"=>"required|array",
+                "general.*.general_code"=>"required|string|exists:generalItems,code|unique:motorItem_generalItem,general_code",
                 'status' => [
                     'required',
                     'string',
