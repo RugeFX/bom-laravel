@@ -2,30 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bom;
-use App\Models\Helmet;
-use App\Models\HelmetItem;
+use App\Models\Staff;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-class helmetItemController extends Controller
+class StaffController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public $possible_relations = ["bom.material.helmet", "reservation","plan"];
+    public $possible_relations = ["user","role.privilege.menuitem.menugroup"];
+
     public function index(Request $request)
     {
-        $data = new HelmetItem();
+        $data = new Staff();
 
         $relations = $request->input("relations");
         if ($relations) {
             $data = handle_relations($relations, $this->possible_relations, $data);
         }
 
-        return response()->json(["message" => "Success", "data" => $data->get()]);
+        return response()->json([
+            "message" => "Success",
+            "data" => $data->get()
+        ]);
     }
 
     /**
@@ -43,31 +44,13 @@ class helmetItemController extends Controller
     {
         try {
             $validated = $request->validate([
-                "bom_code" => "required|string|exists:boms,bom_code",
-                "name" => "required|string",
-                "code" => "required|string",
-                "plan_code"=>"required|string|exists:plans,plan_code",
-                'status' => [
-                    'required',
-                    'string',
-                    Rule::in(['Ready For Rent','Scrab','In Rental']),
-                ],
-                'information'=>"string",
+                "code"=>"required|string|unique:staffs,code",
+                "name"=>"required|string",
+                "role_code"=>"required|string|exists:roles,code",
+                "urlImage"=>['file', 'image', 'mimes:jpeg,png,jpg,gif'],
+                "information"=>"string",
             ]);
-            
-            $bom = Bom::with('material.helmet')->firstWhere('bom_code', $validated['bom_code']);
-            $stock = $bom->material;
-            $helmetStock = $stock->map(function ($material) {
-                $helmet = $material->helmet;
-                return $helmet->quantity;
-            });
-            $helmetCount = HelmetItem::count();
-            foreach($helmetStock as $h){
-                if($h<=$helmetCount){
-                    return response()->json(["message" => "Failed", "data" => $helmetCount]);
-                }
-            }
-            $data = HelmetItem::query()->create($validated);
+            $data = Staff::query()->create($validated);
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {
@@ -81,9 +64,17 @@ class helmetItemController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, string $id)
+    public function show(string $id)
     {
-        $data = new HelmetItem();
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Request $request,string $id)
+    {
+        $data = new Staff();
 
         $relations = $request->input("relations");
         if ($relations) {
@@ -99,34 +90,22 @@ class helmetItemController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, HelmetItem $helmetItem)
+    public function update(Request $request, Staff $staff)
     {
         try {
             $validated = $request->validate([
-                "bom_code" => "string|exists:boms,bom_code",
-                "name" => "string",
-                "code" => "string",
-                "plan_code"=>"string|exists:plans,plan_code",
-                'status' => [
-                    'string',
-                    Rule::in(['Ready For Rent','Scrab','In Rental']),
-                ],
-                'information'=>"string",
+                "code"=> ["string", \Illuminate\Validation\Rule::unique('staffs', 'code')->ignore($staff->code, "code")],
+                "name"=>"string",
+                "role_code"=>"string|exists:roles,code",
+                "urlImage"=>['file', 'image', 'mimes:jpeg,png,jpg,gif'],
+                "information"=>"string",
             ]);
 
-            $helmetItem->update($validated);
+            $staff->update($validated);
 
-            return response()->json(["message" => "Success", "data" => $helmetItem]);
+            return response()->json(["message" => "Success", "data" => $staff]);
         } catch (\Exception $ex) {
             if ($ex instanceof ValidationException) {
                 return response()->json(["message" => "Failed", "error" => $ex->errors()], Response::HTTP_BAD_REQUEST);
@@ -138,10 +117,9 @@ class helmetItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HelmetItem $helmetItem)
+    public function destroy(Staff $staff)
     {
-        $helmetItem->delete();
-
+        $staff->delete();
         return response()->json(["message" => "Success"]);
     }
 }

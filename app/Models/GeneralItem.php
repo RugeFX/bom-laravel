@@ -22,7 +22,6 @@ class GeneralItem extends Model
         'status',
         'information',
     ];
-
     public function bom(){
         return $this->belongsTo(Bom::class,'bom_code','bom_code');
     }

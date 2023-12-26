@@ -17,7 +17,7 @@ class Menuitem extends Model
     ];
     public function menugroup()
     {
-        return $this->belongsTo(Menugroup::class,"code","menugroup_code");
+        return $this->belongsTo(Menugroup::class,"menugroup_code","code");
     }
     public function privilege()
     {

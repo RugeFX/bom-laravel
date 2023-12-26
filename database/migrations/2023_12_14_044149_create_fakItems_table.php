@@ -12,14 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fakItems', function (Blueprint $table) {
-            $table->id();
             $table->string('code')->unique();
             $table->string('name');
             $table->string('bom_code');
             $table->foreign('bom_code')->references("bom_code")->on('boms')->onDelete('cascade');
             $table->string('plan_code');
             $table->foreign('plan_code')->references("plan_code")->on('plans')->onDelete('cascade');
-            $table->string('Status');
+            $table->enum('status',['Complete','Incomplete','In Rental']);
             $table->string('information')->nullable();
             $table->timestamps();
         });

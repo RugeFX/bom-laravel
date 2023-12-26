@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreign('general_code')->references('code')->on('generalItems')->onDelete('cascade');
             $table->string('code');
             $table->foreign('code')->references('code')->on('motorItems')->onDelete('cascade');
-            // $table->foreignId('motorItem_id')->constrained('motorItems')->onDelete('cascade');
             $table->timestamps();
         });
     }

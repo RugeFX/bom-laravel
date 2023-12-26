@@ -6,6 +6,7 @@ use App\Models\Bom;
 use App\Models\FakItem;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class fakItemController extends Controller
@@ -46,7 +47,11 @@ class fakItemController extends Controller
                 "name" => "required|string",
                 "code" => "required|string",
                 "plan_code"=>"required|string|exists:plans,plan_code",
-                'status'=>"required|string",
+                'status' => [
+                    'required',
+                    'string',
+                    Rule::in(['Complete','Incomplete','In Rental']),
+                ],
                 'information'=>"string",
             ]);
             
@@ -112,7 +117,10 @@ class fakItemController extends Controller
                 "name" => "string",
                 "code" => "string",
                 "plan_code"=>"string|exists:plans,plan_code",
-                'status'=>"string",
+                'status' => [
+                    'string',
+                    Rule::in(['Complete','Incomplete','In Rental']),
+                ],
                 'information'=>"string",
             ]);
 

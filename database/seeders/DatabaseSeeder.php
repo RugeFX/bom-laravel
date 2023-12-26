@@ -26,7 +26,13 @@ class DatabaseSeeder extends Seeder
             MaterialSeeder::class,
             BomSeeder::class,
             PlanSeeder::class,
-            MotorSeeder::class
+            MotorSeeder::class,
+            RoleSeeder::class,
+            StaffSeeder::class,
+            UserSeeder::class,
+            MenugroupSeeder::class,
+            MenuitemSeeder::class,
+            PrivilegeSeeder::class,
         ]);
     }
 }

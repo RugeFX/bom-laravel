@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('reservesation_motor_item', function (Blueprint $table) {
             $table->string('motor_code');
+            $table->enum('status',['Ready For Rent', 'Out Of Service'])->nullable();
             $table->foreign('motor_code')->references("code")->on('motorItems')->onDelete('cascade');
             $table->foreignId('reservation_id')->constrained('reservations')->onDelete('cascade');
             $table->timestamps();

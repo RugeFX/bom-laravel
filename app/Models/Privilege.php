@@ -21,11 +21,11 @@ class Privilege extends Model
 
     public function menuitem()
     {
-        return $this->belongsTo(Menuitem::class,"code","menuitem_code");
+        return $this->belongsTo(Menuitem::class,"menuitem_code","code");
     }
 
     public function role()
     {
-        return $this->belongsTo(Role::class,"code","role_code");
+        return $this->belongsTo(Role::class,"role_code","code");
     }
 }

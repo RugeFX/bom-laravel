@@ -12,7 +12,7 @@ class BomController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public $possible_relations = ["material.helmet","material.hardcase","material.general","material.medicine","helmetItem","fakItem"];
+    public $possible_relations = ["material.helmet","material.hardcase","material.general","material.medicine","material.motor","helmetItem","fakItem"];
 
     public function index(Request $request)
     {

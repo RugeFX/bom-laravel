@@ -6,6 +6,7 @@ use App\Models\Bom;
 use App\Models\GeneralItem;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class generalItemController extends Controller
@@ -45,7 +46,11 @@ class generalItemController extends Controller
                 "name" => "required|string",
                 "code" => "required|string",
                 "plan_code"=>"required|string|exists:plans,plan_code",
-                'status'=>"required|string",
+                'status' => [
+                    'required',
+                    'string',
+                    Rule::in(['Ready For Rent','Scrab','In Rental']),
+                ],
                 'information'=>"string",
             ]);
             
@@ -59,8 +64,8 @@ class generalItemController extends Controller
                 if ($hc <= $moterCount) {
                     return response()->json(["message" => "Failed", "data" => "Hardcase stock only " . $hc]);
                 }
-                $data = GeneralItem::query()->create($validated);
             }
+            $data = GeneralItem::query()->create($validated);   
 
             return response()->json(["message" => "Success", "data" => $data]);
         } catch (\Exception $ex) {
@@ -110,7 +115,10 @@ class generalItemController extends Controller
                 "name" => "string",
                 "code" => "string",
                 "plan_code"=>"string|exists:plans,plan_code",
-                'status'=>"string",
+                'status' => [
+                    'string',
+                    Rule::in(['Ready For Rent','Scrab','In Rental']),
+                ],
                 'information'=>"string",
             ]);
 

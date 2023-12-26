@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('generalItems', function (Blueprint $table) {
-            $table->string("code")->primary();
+            $table->string("code")->unique();
             $table->string('name');
             $table->string('bom_code');
             $table->foreign('bom_code')->references("bom_code")->on('boms')->onDelete('cascade');
             $table->string('plan_code');
             $table->foreign('plan_code')->references("plan_code")->on('plans')->onDelete('cascade');
-            $table->string('status');
+            $table->enum('status',['Ready For Rent','Scrab','In Rental','Out Of Service']);
             $table->string('information')->nullable();
             $table->timestamps();
         });

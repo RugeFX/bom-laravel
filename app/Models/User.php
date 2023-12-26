@@ -43,6 +43,6 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
     public function staff(){
-        return $this->belongsTo(Staff::class,"code","staff_code");
+        return $this->belongsTo(Staff::class,"staff_code","code");
     }
 }

@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('menuitems', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique();
             $table->string('name');
             $table->string('url');
-            $table->string('menugroup_code')->unique();
-            $table->foreignId('menugroup_code')->references('code')->on("menugroups")->onDelete("cascade");
+            $table->string('menugroup_code');
+            $table->foreign('menugroup_code')->references('code')->on("menugroups")->onDelete("cascade");
             $table->timestamps();
         });
     }

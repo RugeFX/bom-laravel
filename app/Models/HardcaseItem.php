@@ -9,6 +9,9 @@ class HardcaseItem extends Model
 {
     use HasFactory;
     protected $table = "hardcaseItems";
+    protected $primaryKey = 'code'; 
+    public $keyType = 'string';
+    public $incrementing = false;
     protected $fillable = [
         'code',
         'bom_code',
@@ -18,7 +21,7 @@ class HardcaseItem extends Model
         'status',
         'information',
     ];
-
+    
     public function bom(){
         return $this->belongsTo(Bom::class,'bom_code','bom_code');
     }

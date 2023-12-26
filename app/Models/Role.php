@@ -15,17 +15,17 @@ class Role extends Model
     public function staff(){
         return $this->hasMany(Staff::class,"role_code","code");
     }
-    public function privilage()
+    public function privilege()
     {
         return $this->hasMany(Privilege::class,"role_code","code");
     }
 
-    // protected static function boot()
-    // {
-    //     parent::boot();
+    protected static function boot()
+    {
+        parent::boot();
 
-    //     static::deleting(function($position){
-    //         $position->staff()->delete();
-    //     });
-    // }
+        static::deleting(function($role){
+            $role->privilege()->delete();
+        });
+    }
 }
