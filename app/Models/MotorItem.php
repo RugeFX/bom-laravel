@@ -49,11 +49,14 @@ class MotorItem extends Model
                     'status' => $status,
                 ]);
             }
-            $hardcase = $motorItem->hardcase;
-            $hardcase->update([
-                'status' => $status,
-                'plan_code' => $motorItem->plan_code
-            ]);
+          
+            if ($motorItem->relationLoaded('hardcase')) {
+                $hardcase = $motorItem->hardcase;
+                $hardcase->update([
+                    'status' => $status,
+                    'plan_code' => $motorItem->plan_code,
+                ]);
+            }
         });
         static::deleting(function (MotorItem $motorItem) {
             $motorItem->load('general','hardcase');
@@ -63,11 +66,13 @@ class MotorItem extends Model
                     'status' => $status,
                 ]);
             }
-            $hardcase = $motorItem->hardcase;
-            $status = ($motorItem->status === 'Out Of Service') ? "Ready For Rent" : (($hardcase->status === 'Scrab') ? 'Scrab' : 'In Rental');
-            $hardcase->update([
-                'status' => $status,
-            ]);
+            if ($motorItem->relationLoaded('hardcase')) {
+                $hardcase = $motorItem->hardcase;
+                $status = ($motorItem->status === 'Out Of Service') ? "Ready For Rent" : (($hardcase->status === 'Scrab') ? 'Scrab' : 'In Rental');
+                $hardcase->update([
+                    'status' => $status,
+                ]);
+            }
             $motorItem->general()->detach();
             $motorItem->hardcase()->detach();
 

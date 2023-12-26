@@ -50,63 +50,70 @@ class Reservation extends Model
             $reservation->load('helmetItems', 'fakItems', 'motorItems.general','hardcaseItems');
         
             // Update Motor Items
-            foreach ($reservation->motorItems as $motorItem) {
-                $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
-                $status =  $motorItem->pivot->status ?? 'In Rental';
-        
-                $motorItem->update([
-                    'plan_code' => $planCode,
-                    'status' => $status,
-                ]);
-            }
-        
-            // Update General Items
-            foreach ($reservation->motorItems as $motorItem) {
-                foreach ($motorItem->general as $generalItem) {
+            if ($reservation->relationLoaded('motorItems.general')) {
+                foreach ($reservation->motorItems as $motorItem) {
                     $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
-                    $status = $motorItem->pivot->status ?? 'In Rental';
-        
-                    $generalItem->update([
+                    $status =  $motorItem->pivot->status ?? 'In Rental';
+            
+                    $motorItem->update([
                         'plan_code' => $planCode,
                         'status' => $status,
                     ]);
                 }
-            }
-        
-            // Update Helmet Items
-            foreach ($reservation->helmetItems as $helmetItem) {
-                if ($helmetItem) {
-                    $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
-                    $status = $helmetItem->pivot->status ?? 'In Rental';
-        
-                    $helmetItem->update([
-                        'plan_code' => $planCode,
-                        'status' => $status,
-                    ]);
+            
+                // Update General Items
+                foreach ($reservation->motorItems as $motorItem) {
+                    foreach ($motorItem->general as $generalItem) {
+                        $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
+                        $status = $motorItem->pivot->status ?? 'In Rental';
+            
+                        $generalItem->update([
+                            'plan_code' => $planCode,
+                            'status' => $status,
+                        ]);
+                    }
                 }
             }
-
-            foreach ($reservation->hardcaseItems as $hardcaseItem) {
-                if ($hardcaseItem) {
-                    $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
-                    $status = ($motorItem->pivot->status === 'Out Of Service') ? $motorItem->pivot->status : ($hardcaseItem->pivot->status ?? 'In Rental');
-        
-                    $hardcaseItem->update([
-                        'plan_code' => $planCode,
-                        'status' => $status,
-                    ]);
+            
+            if($reservation->relationLoaded('helmetItems')){
+                // Update Helmet Items
+                foreach ($reservation->helmetItems as $helmetItem) {
+                    if ($helmetItem) {
+                        $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
+                        $status = $helmetItem->pivot->status ?? 'In Rental';
+            
+                        $helmetItem->update([
+                            'plan_code' => $planCode,
+                            'status' => $status,
+                        ]);
+                    }
                 }
             }
 
-            foreach ($reservation->fakItems as $fakItem) {
-                if ($fakItem) {
-                    $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
-                    $status =  $fakItem->pivot->status ?? 'In Rental';
-        
-                    $fakItem->update([
-                        'plan_code' => $planCode,
-                        'status' => $status,
-                    ]);
+            if($reservation->relationLoaded('hardcaseItems')){
+                foreach ($reservation->hardcaseItems as $hardcaseItem) {
+                    if ($hardcaseItem) {
+                        $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
+                        $status = ($motorItem->pivot->status === 'Out Of Service') ? $motorItem->pivot->status : ($hardcaseItem->pivot->status ?? 'In Rental');
+            
+                        $hardcaseItem->update([
+                            'plan_code' => $planCode,
+                            'status' => $status,
+                        ]);
+                    }
+                }
+            }
+            if($reservation->relationLoaded('fakItems')){
+                foreach ($reservation->fakItems as $fakItem) {
+                    if ($fakItem) {
+                        $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
+                        $status =  $fakItem->pivot->status ?? 'In Rental';
+            
+                        $fakItem->update([
+                            'plan_code' => $planCode,
+                            'status' => $status,
+                        ]);
+                    }
                 }
             }
         });
