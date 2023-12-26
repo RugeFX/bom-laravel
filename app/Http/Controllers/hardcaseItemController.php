@@ -59,9 +59,9 @@ class hardcaseItemController extends Controller
             $bom = Bom::with('material.hardcase')->firstWhere('bom_code', $validated['bom_code']);
             $stock = $bom->material;
             $hardcaseStock = $stock->map(function ($material) {
-                $hardcase = $material->hardcase;
-                return $hardcase->quantity;
-            });
+                return optional($material->hardcase)->quantity;
+
+            })->filter()->toArray();
             $hardcaseCount = HardcaseItem::count();
             foreach($hardcaseStock as $h){
                 if($h<=$hardcaseCount){

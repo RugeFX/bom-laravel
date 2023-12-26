@@ -58,9 +58,8 @@ class fakItemController extends Controller
             $bom = Bom::with('material.medicine')->firstWhere('bom_code', $validated['bom_code']);
             $stock = $bom->material;
             $fakStock = $stock->map(function ($material) {
-                $fak = $material->medicine;
-                return $fak->quantity;
-            });
+                return optional($material->medicine)->quantity;
+            })->filter()->toArray();
             $fakCount = FakItem::count();
             foreach($fakStock as $h){
                 if($h<=$fakCount){
