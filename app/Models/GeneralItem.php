@@ -26,7 +26,7 @@ class GeneralItem extends Model
         return $this->belongsTo(Bom::class,'bom_code','bom_code');
     }
     public function motorItems(){
-        return $this->belongsToMany(MotorItem::class,'motorItem_generalItem','general_code','motorItem_id');
+        return $this->belongsToMany(MotorItem::class,'motorItem_generalItem','general_code','motorItem_code');
     }
     public function plan(){
         return $this->belongsTo(Plan::class,'plan_code','plan_code');
