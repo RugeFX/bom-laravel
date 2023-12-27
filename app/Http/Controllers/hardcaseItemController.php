@@ -116,9 +116,9 @@ class hardcaseItemController extends Controller
             $validated = $request->validate([
                 "bom_code" => "string|exists:boms,bom_code",
                 "name" => "string",
-                "code" => "string|unique:hardcaseItems,code",
+                "code" => ["string", \Illuminate\Validation\Rule::unique('hardcaseItems', 'code')->ignore($hardcaseItem->code, "code")],
                 "plan_code"=>"string|exists:plans,plan_code",
-                "monorack_code"=>"string|unique:hardcaseItems,monorack_code",  
+                "monorack_code"=> ["string", \Illuminate\Validation\Rule::unique('hardcaseItems', 'monorack_code')->ignore($hardcaseItem->monorack_code, "monorack_code")],  
                 'status' => [
                     'string',
                     Rule::in(['Ready For Rent','Scrab','In Rental']),
