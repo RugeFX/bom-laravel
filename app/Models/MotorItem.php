@@ -50,7 +50,7 @@ class MotorItem extends Model
                 ]);
             }
           
-            if ($motorItem->relationLoaded('hardcase')) {
+            if (!is_null($motorItem->hardcase)) {
                 $hardcase = $motorItem->hardcase;
                 $hardcase->update([
                     'status' => $status,
@@ -66,7 +66,7 @@ class MotorItem extends Model
                     'status' => $status,
                 ]);
             }
-            if ($motorItem->relationLoaded('hardcase')) {
+            if (!is_null($motorItem->hardcase)) {
                 $hardcase = $motorItem->hardcase;
                 $status = ($motorItem->status === 'Out Of Service') ? "Ready For Rent" : (($hardcase->status === 'Scrab') ? 'Scrab' : 'In Rental');
                 $hardcase->update([

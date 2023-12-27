@@ -50,7 +50,7 @@ class Reservation extends Model
             $reservation->load('helmetItems', 'fakItems', 'motorItems.general','hardcaseItems');
         
             // Update Motor Items
-            if ($reservation->relationLoaded('motorItems.general')) {
+            if (!is_null($reservation->motorItems)) {
                 foreach ($reservation->motorItems as $motorItem) {
                     $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
                     $status =  $motorItem->pivot->status ?? 'In Rental';
@@ -75,7 +75,7 @@ class Reservation extends Model
                 }
             }
             
-            if($reservation->relationLoaded('helmetItems')){
+            if(!is_null($reservation->helmetItems)){
                 // Update Helmet Items
                 foreach ($reservation->helmetItems as $helmetItem) {
                     if ($helmetItem) {
@@ -90,7 +90,7 @@ class Reservation extends Model
                 }
             }
 
-            if($reservation->relationLoaded('hardcaseItems')){
+            if(!is_null($reservation->hardcaseItems)){
                 foreach ($reservation->hardcaseItems as $hardcaseItem) {
                     if ($hardcaseItem) {
                         $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
@@ -103,7 +103,7 @@ class Reservation extends Model
                     }
                 }
             }
-            if($reservation->relationLoaded('fakItems')){
+            if(!is_null($reservation->fakItems)){
                 foreach ($reservation->fakItems as $fakItem) {
                     if ($fakItem) {
                         $planCode = $reservation->returnPlan_code ?? $reservation->pickupPlan_code;
