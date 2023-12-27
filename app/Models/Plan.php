@@ -19,6 +19,12 @@ class Plan extends Model
     public function fakItems(){
         return $this->hasMany(FakItem::class,'plan_code','plan_code');
     }
+    public function hardcaseItems(){
+        return $this->hasMany(HardcaseItem::class,'plan_code','plan_code');
+    }
+    public function motorItems(){
+        return $this->hasMany(MotorItem::class,'plan_code','plan_code');
+    }
     public function pickup(){
         return $this->hasMany(Reservation::class,'pickupPlan_code','plan_code');
     }
