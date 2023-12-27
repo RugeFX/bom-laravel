@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('bom_code')->references("bom_code")->on('boms')->onDelete('cascade');
             $table->string('plan_code');
             $table->foreign('plan_code')->references("plan_code")->on('plans')->onDelete('cascade');
-            $table->enum('status',['Ready For Rent','Scrab','In Rental','Out Of Service']);
+            $table->enum('status',['Ready For Rent','Scrab',"Lost",'In Rental','Out Of Service']);
             $table->string('information')->nullable();
             $table->timestamps();
         });

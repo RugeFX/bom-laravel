@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BomController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColormasterController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\fakItemController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\generalItemController;
@@ -38,10 +39,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::get("/dashboard", DashboardController::class);
 Route::middleware("auth:sanctum")->group(function () {
     Route::post("logout", [AuthController::class, "logout"]);
     Route::get("profile", [AuthController::class, "profile"]);
-    // Route::post("/dashboard", DashboardController::class);
 
         Route::apiResource('categories', CategoryController::class);
         Route::apiResource('colors', ColormasterController::class);
