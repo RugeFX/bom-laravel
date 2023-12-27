@@ -26,7 +26,7 @@ class HardcaseItem extends Model
         return $this->belongsTo(Bom::class,'bom_code','bom_code');
     }
     public function reservation(){
-        return $this->belongsToMany(Helmet::class,'reservations_motorItem','motor_code','code')->withPivot('motor_code');
+        return $this->belongsToMany(Helmet::class,'reservations_hardcaseitem','hardcase_code','code')->withPivot('hardcase_code');
     }
     public function plan(){
         return $this->belongsTo(Plan::class,'plan_code','plan_code');
