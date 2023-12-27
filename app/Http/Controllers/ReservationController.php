@@ -52,7 +52,7 @@ class ReservationController extends Controller
                 'motor' => 'required|array',
                 'hardcase' => 'array',
                 "fak.*.fak_code" => "string|exists:fakItems,code",
-                "helmet.*.helmet_code"=>"required|string|exists:helmetitems,code",
+                "helmet.*.helmet_code"=>"required|string|exists:helmetItems,code",
                 "motor.*.motor_code"=>"required|string|exists:motorItems,code",
                 "hardcase.*.hardcase_code"=>"string|exists:hardcaseItems,code",
                 'status'=>[
@@ -140,7 +140,7 @@ class ReservationController extends Controller
                 'hardcase' => 'array',
                 "fak.*.fak_code" => "string|exists:fakItems,code",
                 "hardcase.*.hardcase_code" => "string|exists:hardcaseItems,code",
-                "helmet.*.helmet_code"=>"string|exists:helmetitems,code",
+                "helmet.*.helmet_code"=>"string|exists:helmetItems,code",
                 "motor.*.motor_code"=>"string|exists:motorItems,code",
                 "fak.*.status" =>[
                     'string',
