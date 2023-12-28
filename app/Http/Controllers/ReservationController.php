@@ -152,22 +152,27 @@ class ReservationController extends Controller
                 "helmet.*.helmet_code"=>"required|string|exists:helmetItems,code",
                 "motor.*.motor_code"=>"required|string|exists:motorItems,code",
                 "fak.*.status" =>[
+                    'required',
                     'string',
                     Rule::in(['Complete','Incomplete']),
                 ],
                 "helmet.*.status"=> [
+                    'required',
                     'string',
                     Rule::in(['Lost','Scrab','Ready For Rent']),
                 ],
                 "motor.*.status"=>[
+                    'required',
                     'string',
                     Rule::in(['Ready For Rent', 'Out Of Service']),
                 ],
                 "hardcase.*.status"=>[
+                    'required',
                     'string',
                     Rule::in(['Lost','Scrab','Ready For Rent']),
                 ],
                 'status'=>[
+                    'required',
                     'string',
                     Rule::in(['Finished Rental','In Rental']),
                 ],
