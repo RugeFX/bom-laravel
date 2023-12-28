@@ -24,7 +24,7 @@ class HelmetItem extends Model
         return $this->belongsTo(Bom::class,'bom_code','bom_code');
     }
     public function reservation(){
-        return $this->belongsToMany(Helmet::class,'reservations_helmetItem','helmet_code','code')->withPivot('helmet_code');
+        return $this->belongsToMany(Reservation::class,'reservations_helmetItem','helmet_code','reservation_id')->withPivot('helmet_code');
     }
     public function plan(){
         return $this->belongsTo(Plan::class,'plan_code','plan_code');

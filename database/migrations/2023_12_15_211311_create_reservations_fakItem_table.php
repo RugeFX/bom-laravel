@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('reservations_fakItem', function (Blueprint $table) {
             $table->string('fak_code');
-            $table->enum('status',['Complete','Incomplete'])->nullable();
+            $table->enum('status',['Complete','Incomplete','Lost'])->nullable();
             $table->foreign('fak_code')->references("code")->on('fakItems')->onDelete('cascade');
             $table->foreignId('reservation_id')->constrained('reservations')->onDelete('cascade');
             $table->timestamps();

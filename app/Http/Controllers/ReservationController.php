@@ -154,7 +154,7 @@ class ReservationController extends Controller
                 "fak.*.status" =>[
                     'required',
                     'string',
-                    Rule::in(['Complete','Incomplete']),
+                    Rule::in(['Complete','Incomplete',"Lost"]),
                 ],
                 "helmet.*.status"=> [
                     'required',

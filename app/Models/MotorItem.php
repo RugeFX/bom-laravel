@@ -27,7 +27,7 @@ class MotorItem extends Model
         return $this->belongsTo(Bom::class,'bom_code','bom_code');
     }
     public function reservation(){
-        return $this->belongsToMany(Reservation::class,'reservesation_motor_item','motor_code','reservation_id');
+        return $this->belongsToMany(Reservation::class,'reservesation_motor_item','motor_code','reservation_id')->withPivot("motor_code");
     }
     public function general(){
         return $this->belongsToMany(GeneralItem::class,'motorItem_generalItem','code','general_code')->withPivot('general_code');
