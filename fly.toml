@@ -13,12 +13,16 @@ console_command = "php /var/www/html/artisan tinker"
     PHP_VERSION = "8.2"
 
 [env]
-  APP_ENV = "production"
+  APP_ENV = "development"
+  APP_URL = "https://bom-api.rugefx.com"
   LOG_CHANNEL = "stderr"
-  LOG_LEVEL = "info"
+  LOG_LEVEL = "debug"
   LOG_STDERR_FORMATTER = "Monolog\\Formatter\\JsonFormatter"
   SESSION_DRIVER = "cookie"
   SESSION_SECURE_COOKIE = "true"
+  DB_CONNECTION = "pgsql"
+  SESSION_DOMAIN = ".rugefx.com"
+  SANCTUM_STATEFUL_DOMAINS = "bom-api.rugefx.com,bom.rugefx.com"
 
 [http_service]
   internal_port = 8080
