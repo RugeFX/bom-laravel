@@ -22,7 +22,7 @@ console_command = "php /var/www/html/artisan tinker"
   SESSION_SECURE_COOKIE = "true"
   DB_CONNECTION = "pgsql"
   SESSION_DOMAIN = ".rugefx.com"
-  SANCTUM_STATEFUL_DOMAINS = "bom.rugefx.com,bom-api.rugefx.com"
+  SANCTUM_STATEFUL_DOMAINS = "bom-api.rugefx.com,bom.rugefx.com"
 
 [http_service]
   internal_port = 8080
