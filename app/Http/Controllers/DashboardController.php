@@ -59,6 +59,14 @@ class DashboardController extends Controller
             'OutOfService' => $motor->where('status', 'Out Of Service')->count(),
             'InRental' => $motor->where('status', 'In Rental')->count(),
         ];
+        $AllFakData = [
+            "name" => "Fak",
+            'Total' => $fak->count(),
+            "Lost" => $fak->where('status', 'Lost')->count(),
+            "Complete" => $fak->where('status', 'Complete')->count(),
+            "Incomplete" => $fak->where('status', 'Incomplete')->count(),
+            "InRental" => $fak->where('status', 'In Rental')->count(),
+        ];
         $AllhardcaseData = [
             "name" => "Hardcase",
             "Total" => $hardcase->count(),
@@ -95,32 +103,43 @@ class DashboardController extends Controller
             $planItem = [
                 "name" => $p->name,
                 "Motor" => [
-                    "Total" => $p->motorItems->count(),
-                    "ReadyForRent" => $p->motorItems->where('status', 'Ready For Rent')->count(),
-                    "OutOfService" => $p->motorItems->where('status', 'Out Of Service')->count(),
-                    "InRental" => $p->motorItems->where('status', 'In Rental')->count(),
+                    [
+                        'name' => "Motor",
+                        "Total" => $p->motorItems->count(),
+                        "ReadyForRent" => $p->motorItems->where('status', 'Ready For Rent')->count(),
+                        "OutOfService" => $p->motorItems->where('status', 'Out Of Service')->count(),
+                        "InRental" => $p->motorItems->where('status', 'In Rental')->count(),
+                    ]
                 ],
                 "Hardcase" => [
-                    "Total" => $p->hardcaseItems->count(),
-                    "Lost" => $p->hardcaseItems->where('status', 'Lost')->count(),
-                    "Scrab" => $p->hardcaseItems->where('status', 'Scrab')->count(),
-                    "ReadyForRent" => $p->hardcaseItems->where('status', 'Ready For Rent')->count(),
-                    "OutOfService" => $p->hardcaseItems->where('status', 'Out Of Service')->count(),
-                    "InRental" => $p->hardcaseItems->where('status', 'In Rental')->count(),
+                    [
+                        'name' => "Hardcase",
+                        "Total" => $p->hardcaseItems->count(),
+                        "Lost" => $p->hardcaseItems->where('status', 'Lost')->count(),
+                        "Scrab" => $p->hardcaseItems->where('status', 'Scrab')->count(),
+                        "ReadyForRent" => $p->hardcaseItems->where('status', 'Ready For Rent')->count(),
+                        "OutOfService" => $p->hardcaseItems->where('status', 'Out Of Service')->count(),
+                        "InRental" => $p->hardcaseItems->where('status', 'In Rental')->count(),
+                    ]
                 ],
                 "Helmet" => [
-                    "Total" => $p->helmetItems->count(),
-                    "Lost" => $p->helmetItems->where('status', 'Lost')->count(),
-                    "Scrab" => $p->helmetItems->where('status', 'Scrab')->count(),
-                    "ReadyForRent" => $p->helmetItems->where('status', 'Ready For Rent')->count(),
-                    "OutOfService" => $p->helmetItems->where('status', 'Out Of Service')->count(),
-                    "InRental" => $p->helmetItems->where('status', 'In Rental')->count(),
+                    [
+                        'name' => "Helmet",
+                        "Total" => $p->helmetItems->count(),
+                        "Lost" => $p->helmetItems->where('status', 'Lost')->count(),
+                        "Scrab" => $p->helmetItems->where('status', 'Scrab')->count(),
+                        "ReadyForRent" => $p->helmetItems->where('status', 'Ready For Rent')->count(),
+                        "OutOfService" => $p->helmetItems->where('status', 'Out Of Service')->count(),
+                        "InRental" => $p->helmetItems->where('status', 'In Rental')->count(),
+                    ]
                 ],
                 "Fak" => [
-                    "Total" => $p->fakItems->count(),
-                    "Complete" => $p->fakItems->where('status', 'Complete')->count(),
-                    "Incomplete" => $p->fakItems->where('status', 'Incomplete')->count(),
-                    "InRental" => $p->fakItems->where('status', 'In Rental')->count(),
+                    [
+                        "Total" => $p->fakItems->count(),
+                        "Complete" => $p->fakItems->where('status', 'Complete')->count(),
+                        "Incomplete" => $p->fakItems->where('status', 'Incomplete')->count(),
+                        "InRental" => $p->fakItems->where('status', 'In Rental')->count(),
+                    ]
                 ]
             ];
             $planItems[] = $planItem;
@@ -132,6 +151,7 @@ class DashboardController extends Controller
                 "Hardcase" => $hardcaseItem,
                 "AllHardcase" => [$AllhardcaseData],
                 "Fak" => $fakItem,
+                "AllFakData" => [$AllFakData],
                 "Helmet" => $helmetItem,
                 "AllHelmet" => [$AllhelmetData],
                 "Plan" => $planItems,
